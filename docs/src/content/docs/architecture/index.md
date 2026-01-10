@@ -18,7 +18,7 @@ UniDash follows a microservices architecture with separated APIs:
 
 ## Technology Stack
 
-- **Backend**: Python 3.14, FastAPI, SQLAlchemy 2.0
+- **Backend**: Python 3.13, FastAPI, SQLAlchemy 2.0
 - **Frontend**: Astro 5, React, Tailwind CSS v4
 - **Database**: PostgreSQL 17 with Patroni HA
 - **Cache**: Redis 7
