@@ -6,8 +6,6 @@ and contain the expected content structure.
 
 from pathlib import Path
 
-import pytest
-
 # Navigate from api/shared/tests to project root
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
@@ -23,8 +21,6 @@ class TestGitHubCommunityStandards:
     def test_readme_has_required_sections(self) -> None:
         """Verify README.md contains required sections."""
         readme = PROJECT_ROOT / "README.md"
-        if not readme.is_file():
-            pytest.skip("README.md does not exist yet")
 
         content = readme.read_text()
         required_sections = [
@@ -45,8 +41,6 @@ class TestGitHubCommunityStandards:
     def test_contributing_has_required_sections(self) -> None:
         """Verify CONTRIBUTING.md contains required sections."""
         contributing = PROJECT_ROOT / "CONTRIBUTING.md"
-        if not contributing.is_file():
-            pytest.skip("CONTRIBUTING.md does not exist yet")
 
         content = contributing.read_text()
         required_sections = [
@@ -69,8 +63,6 @@ class TestGitHubCommunityStandards:
     def test_code_of_conduct_is_contributor_covenant(self) -> None:
         """Verify CODE_OF_CONDUCT.md is Contributor Covenant v2.1."""
         coc = PROJECT_ROOT / "CODE_OF_CONDUCT.md"
-        if not coc.is_file():
-            pytest.skip("CODE_OF_CONDUCT.md does not exist yet")
 
         content = coc.read_text()
         assert (
@@ -86,8 +78,6 @@ class TestGitHubCommunityStandards:
     def test_license_is_valid(self) -> None:
         """Verify LICENSE is a valid open source license (LGPL or MIT)."""
         license_file = PROJECT_ROOT / "LICENSE"
-        if not license_file.is_file():
-            pytest.skip("LICENSE does not exist yet")
 
         content = license_file.read_text()
         is_lgpl = (
@@ -105,8 +95,6 @@ class TestGitHubCommunityStandards:
     def test_security_has_required_sections(self) -> None:
         """Verify SECURITY.md contains required sections."""
         security = PROJECT_ROOT / "SECURITY.md"
-        if not security.is_file():
-            pytest.skip("SECURITY.md does not exist yet")
 
         content = security.read_text()
         required_sections = [
@@ -170,8 +158,6 @@ class TestGitHubPRTemplate:
     def test_pr_template_has_required_sections(self) -> None:
         """Verify PR template contains required sections."""
         pr_template = PROJECT_ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md"
-        if not pr_template.is_file():
-            pytest.skip("PULL_REQUEST_TEMPLATE.md does not exist yet")
 
         content = pr_template.read_text()
         required_sections = [
@@ -194,8 +180,6 @@ class TestDependabot:
     def test_dependabot_has_required_ecosystems(self) -> None:
         """Verify dependabot.yml configures required ecosystems."""
         dependabot = PROJECT_ROOT / ".github" / "dependabot.yml"
-        if not dependabot.is_file():
-            pytest.skip("dependabot.yml does not exist yet")
 
         content = dependabot.read_text()
         required_ecosystems = ["pip", "npm", "github-actions"]
