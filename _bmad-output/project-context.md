@@ -264,6 +264,137 @@ web/tests/
 
 ### Development Workflow Rules
 
+#### Continuous Documentation Policy
+
+**Principe fondamental :** La documentation fait partie intégrante de chaque feature, pas un effort séparé.
+
+**Langue obligatoire :** English only pour :
+- Code comments
+- Docstrings (Python)
+- JSDoc (TypeScript)
+- Starlight documentation
+- Commit messages
+- PR descriptions
+
+**Règles obligatoires :**
+
+1. **Chaque story inclut sa documentation**
+   - Starlight docs mises à jour dans la même PR que le code
+   - Pas de merge sans documentation correspondante
+   - La documentation est un critère d'acceptation
+
+2. **GitHub Community Standards (one-time setup)**
+   - README.md, CONTRIBUTING.md, etc. créés avec la première story (1-1)
+   - Mis à jour au besoin par les stories suivantes
+
+3. **Documentation par layer**
+
+| Layer | Où documenter | Quand |
+|-------|---------------|-------|
+| API endpoints | Starlight `docs/api/` + OpenAPI auto | Avec chaque endpoint |
+| Architecture | Starlight `docs/architecture/` | Avec chaque composant majeur |
+| Deployment | Starlight `docs/deployment/` | Avec chaque infra change |
+| User guide | Starlight `docs/getting-started/` | Avec chaque feature user-facing |
+
+4. **Format de documentation**
+   - Starlight (docs/) = source unique de vérité
+   - README.md racine = résumé + liens vers Starlight
+   - Code comments = pourquoi, pas quoi
+
+5. **Acceptance Criteria standard**
+   - Chaque story doit inclure: `Documentation Starlight mise à jour si applicable`
+
+#### Documentation Enforcement (CI/CD)
+
+**Automated checks in GitHub Actions (all blocking) :**
+
+1. **Docstring coverage (Python - Ruff)**
+   - Ruff rules: `D100-D107` (pydocstyle) - docstrings required
+   - Config: `pyproject.toml` with `select = ["D"]`
+   - 100% coverage on public functions/classes/modules
+
+2. **JSDoc coverage (TypeScript - ESLint)**
+   - Plugin: `eslint-plugin-jsdoc`
+   - Rules: `jsdoc/require-jsdoc` on exports
+   - 100% coverage on exported functions/classes
+
+3. **Starlight documentation check**
+   - Custom GitHub Action script checks if PR modifies:
+     - `api/` → requires `docs/api/` update
+     - `web/src/features/` → requires `docs/getting-started/` or `docs/architecture/` update
+     - `infra/` → requires `docs/deployment/` update
+   - Can be overridden with `skip-docs` label (hotfixes only)
+
+4. **AI Code Review**
+   - Tool: CodeRabbit AI (free for open source, unlimited PRs)
+   - Alternative: Sourcery (free for open source Python)
+   - Checks: code style, documentation quality, potential bugs
+   - Advisory comments on PR (non-blocking)
+   - Setup: Add `.coderabbit.yaml` config + enable GitHub App
+
+5. **Auto-generated API docs (Starlight integration)**
+
+   **TypeScript → Starlight (native):**
+   - Plugin: `starlight-typedoc` (official Starlight plugin)
+   - Reads JSDoc from TypeScript source → generates pages in Starlight
+   - Config in `astro.config.mjs`:
+     ```js
+     import starlightTypeDoc from 'starlight-typedoc'
+     integrations: [
+       starlight({
+         plugins: [starlightTypeDoc({ entryPoints: ['../web/src/**/*.ts'] })]
+       })
+     ]
+     ```
+
+   **Python → Starlight (via mkdocstrings):**
+   - Tool: `mkdocstrings` with `mkdocs-material` theme
+   - Generates Markdown from Python docstrings
+   - CI workflow copies generated `.md` files to `docs/src/content/docs/api/python/`
+   - Alternative: `sphinx` + `sphinx-markdown-builder` for more control
+
+   **Workflow:**
+   - On merge to `develop`: CI generates docs, commits to `docs/api/reference/`
+   - Pages auto-update on next Starlight build
+
+**Tools configuration :**
+
+```toml
+# pyproject.toml - Ruff docstring rules
+[tool.ruff.lint]
+select = [
+  "D",     # pydocstyle - docstrings
+  "E",     # pycodestyle errors
+  "F",     # pyflakes
+  "I",     # isort
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  # Google style docstrings
+```
+
+```json
+// .eslintrc.json - JSDoc rules
+{
+  "plugins": ["jsdoc"],
+  "extends": ["plugin:jsdoc/recommended"],
+  "rules": {
+    "jsdoc/require-jsdoc": ["error", {
+      "publicOnly": true,
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": true
+      }
+    }],
+    "jsdoc/require-description": "error",
+    "jsdoc/require-param-description": "error",
+    "jsdoc/require-returns-description": "error"
+  }
+}
+```
+
 #### GitFlow Branching Strategy
 
 **Branches principales :**

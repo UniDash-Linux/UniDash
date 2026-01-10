@@ -5,10 +5,12 @@ Status: done
 ## Story
 
 As a **développeur**,
-I want **une structure de projet initialisée avec les outils de développement**,
-So that **je puisse commencer le développement avec les bonnes pratiques**.
+I want **une structure de projet initialisée avec les outils de développement et la documentation**,
+So that **je puisse commencer le développement avec les bonnes pratiques et une documentation automatisée**.
 
 ## Acceptance Criteria
+
+### Project Structure (DONE)
 
 1. **Given** un repository git vide
    **When** le script d'initialisation est exécuté
@@ -23,6 +25,46 @@ So that **je puisse commencer le développement avec les bonnes pratiques**.
 5. **And** le workflow CI GitHub Actions de base est créé
 
 6. **And** les tests de validation de structure passent à 100%
+
+### GitHub Community Standards (TODO)
+
+7. **And** README.md est créé (English, liens vers Starlight)
+
+8. **And** CONTRIBUTING.md est créé (English, GitFlow, Conventional Commits)
+
+9. **And** CODE_OF_CONDUCT.md est créé (Contributor Covenant v2.1)
+
+10. **And** LICENSE est créé (MIT)
+
+11. **And** SECURITY.md est créé (English)
+
+12. **And** .github/ISSUE_TEMPLATE/ est configuré (bug_report.yml, feature_request.yml, question.yml, config.yml)
+
+13. **And** .github/PULL_REQUEST_TEMPLATE.md est créé
+
+14. **And** .github/dependabot.yml est configuré
+
+### Documentation Enforcement (TODO)
+
+15. **And** Ruff est configuré avec règles D (docstrings obligatoires - Google style)
+
+16. **And** ESLint est configuré avec eslint-plugin-jsdoc (JSDoc obligatoire sur exports)
+
+17. **And** GitHub Action pour vérifier mise à jour Starlight est créée
+
+18. **And** CodeRabbit AI est configuré (.coderabbit.yaml)
+
+### Starlight Documentation (TODO)
+
+19. **And** docs/ est initialisé avec Astro Starlight
+
+20. **And** la structure de base est créée (getting-started/, architecture/, api/, deployment/, development/)
+
+21. **And** starlight-typedoc est configuré pour auto-génération TypeScript
+
+22. **And** mkdocstrings workflow est configuré pour Python
+
+23. **And** la sidebar est configurée avec liens Community vers GitHub .md
 
 ## Tasks / Subtasks (TDD - Test First)
 
@@ -144,19 +186,153 @@ So that **je puisse commencer le développement avec les bonnes pratiques**.
   - [ ] 13.3 Créer `.github/workflows/docs-deploy.yml`
   - [ ] 13.4 Vérifier: `pytest api/shared/tests/test_ci_workflows.py` → PASS
 
-### Phase 8: Documentation Starlight
+### Phase 8: Documentation Starlight (DONE)
 
-- [ ] **Task 14: Initialiser Documentation Starlight** (AC: #1)
-  - [ ] 14.1 Exécuter `npm create astro@latest docs -- --template starlight --typescript strict`
-  - [ ] 14.2 Configurer `astro.config.mjs` pour GitHub Pages
+- [x] **Task 14: Initialiser Documentation Starlight** (AC: #19)
+  - [x] 14.1 Exécuter `npm create astro@latest docs -- --template starlight --typescript strict`
+  - [x] 14.2 Configurer `astro.config.mjs` pour GitHub Pages
 
-### Phase 9: Validation Finale
+### Phase 9: Validation Initiale (DONE)
 
-- [ ] **Task 15: Coverage Final 100%** (AC: #6)
-  - [ ] 15.1 Exécuter `pytest api/shared/tests/ --cov=api --cov-report=term-missing --cov-fail-under=100`
-  - [ ] 15.2 Exécuter `cd web && npm run test:coverage`
-  - [ ] 15.3 Vérifier tous les tests passent
-  - [ ] 15.4 Commit initial: `feat(init): initialize project structure with TDD`
+- [x] **Task 15: Coverage Initial 100%** (AC: #6)
+  - [x] 15.1 Exécuter `pytest api/shared/tests/ --cov=api --cov-report=term-missing --cov-fail-under=100`
+  - [x] 15.2 Exécuter `cd web && npm run test:coverage`
+  - [x] 15.3 Vérifier tous les tests passent
+  - [x] 15.4 Commit initial: `feat(init): initialize project structure with TDD`
+
+---
+
+## NEW PHASES (TODO) - Documentation Continue
+
+### Phase 10: GitHub Community Standards (TODO)
+
+- [ ] **Task 16: TESTS - GitHub Community Standards** (AC: #7-14) 🔴 RED
+  - [ ] 16.1 Créer `api/shared/tests/test_github_standards.py`
+  - [ ] 16.2 Écrire test `test_readme_exists()` - doit FAIL
+  - [ ] 16.3 Écrire test `test_contributing_exists()` - doit FAIL
+  - [ ] 16.4 Écrire test `test_code_of_conduct_exists()` - doit FAIL
+  - [ ] 16.5 Écrire test `test_license_exists()` - doit FAIL
+  - [ ] 16.6 Écrire test `test_security_exists()` - doit FAIL
+  - [ ] 16.7 Écrire test `test_issue_templates_exist()` - doit FAIL
+  - [ ] 16.8 Écrire test `test_pr_template_exists()` - doit FAIL
+  - [ ] 16.9 Écrire test `test_dependabot_exists()` - doit FAIL
+  - [ ] 16.10 Vérifier: `pytest api/shared/tests/test_github_standards.py` → FAIL
+
+- [ ] **Task 17: IMPL - README.md** (AC: #7) 🟢 GREEN
+  - [ ] 17.1 Créer `README.md` (English)
+  - [ ] 17.2 Header avec badges (CI, coverage, license, docs)
+  - [ ] 17.3 Description courte du projet
+  - [ ] 17.4 Quick links vers Starlight docs
+  - [ ] 17.5 Installation rapide (liens vers docs/getting-started/)
+  - [ ] 17.6 Liens Contributing, License, Security
+
+- [ ] **Task 18: IMPL - CONTRIBUTING.md** (AC: #8) 🟢 GREEN
+  - [ ] 18.1 Créer `CONTRIBUTING.md` (English)
+  - [ ] 18.2 Welcome section
+  - [ ] 18.3 Development setup (liens vers docs/development/)
+  - [ ] 18.4 GitFlow workflow (diagramme Mermaid)
+  - [ ] 18.5 Conventional Commits (examples)
+  - [ ] 18.6 Code style (Ruff, Black, Prettier)
+  - [ ] 18.7 Testing requirements (TDD, 100% coverage)
+  - [ ] 18.8 Pull Request process
+
+- [ ] **Task 19: IMPL - Other GitHub Files** (AC: #9-14) 🟢 GREEN
+  - [ ] 19.1 Créer `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1)
+  - [ ] 19.2 Créer `LICENSE` (MIT)
+  - [ ] 19.3 Créer `SECURITY.md` (English)
+  - [ ] 19.4 Créer `.github/ISSUE_TEMPLATE/bug_report.yml`
+  - [ ] 19.5 Créer `.github/ISSUE_TEMPLATE/feature_request.yml`
+  - [ ] 19.6 Créer `.github/ISSUE_TEMPLATE/question.yml`
+  - [ ] 19.7 Créer `.github/ISSUE_TEMPLATE/config.yml`
+  - [ ] 19.8 Créer `.github/PULL_REQUEST_TEMPLATE.md`
+  - [ ] 19.9 Créer `.github/dependabot.yml`
+  - [ ] 19.10 Vérifier: `pytest api/shared/tests/test_github_standards.py` → PASS
+
+### Phase 11: Documentation Enforcement (TODO)
+
+- [ ] **Task 20: TESTS - Documentation Enforcement** (AC: #15-18) 🔴 RED
+  - [ ] 20.1 Créer `api/shared/tests/test_doc_enforcement.py`
+  - [ ] 20.2 Écrire test `test_ruff_docstring_rules_enabled()` - doit FAIL
+  - [ ] 20.3 Écrire test `test_eslint_jsdoc_rules_enabled()` - doit FAIL
+  - [ ] 20.4 Écrire test `test_docs_check_workflow_exists()` - doit FAIL
+  - [ ] 20.5 Écrire test `test_coderabbit_config_exists()` - doit FAIL
+  - [ ] 20.6 Vérifier: `pytest api/shared/tests/test_doc_enforcement.py` → FAIL
+
+- [ ] **Task 21: IMPL - Ruff Docstring Rules** (AC: #15) 🟢 GREEN
+  - [ ] 21.1 Mettre à jour `ruff.toml` avec règles D (pydocstyle)
+  - [ ] 21.2 Configurer convention Google style
+  - [ ] 21.3 Ajouter docstrings à tous les modules existants
+  - [ ] 21.4 Vérifier: `ruff check api/` → PASS
+
+- [ ] **Task 22: IMPL - ESLint JSDoc Rules** (AC: #16) 🟢 GREEN
+  - [ ] 22.1 `cd web && npm install -D eslint-plugin-jsdoc`
+  - [ ] 22.2 Mettre à jour `eslint.config.js` avec plugin jsdoc
+  - [ ] 22.3 Configurer règles jsdoc/require-jsdoc, require-description, require-param-description
+  - [ ] 22.4 Vérifier: `cd web && npm run lint` → PASS
+
+- [ ] **Task 23: IMPL - GitHub Actions Documentation Check** (AC: #17) 🟢 GREEN
+  - [ ] 23.1 Créer `.github/workflows/docs-check.yml`
+  - [ ] 23.2 Script bash vérifie si PR modifie api/ → exige docs/api/ update
+  - [ ] 23.3 Script bash vérifie si PR modifie web/src/features/ → exige docs/ update
+  - [ ] 23.4 Label `skip-docs` pour override (hotfixes)
+
+- [ ] **Task 24: IMPL - CodeRabbit AI Config** (AC: #18) 🟢 GREEN
+  - [ ] 24.1 Créer `.coderabbit.yaml`
+  - [ ] 24.2 Configurer review language: English
+  - [ ] 24.3 Configurer checks: code style, documentation quality
+  - [ ] 24.4 Activer CodeRabbit GitHub App sur le repo
+  - [ ] 24.5 Vérifier: `pytest api/shared/tests/test_doc_enforcement.py` → PASS
+
+### Phase 12: Starlight Configuration Avancée (TODO)
+
+- [ ] **Task 25: TESTS - Starlight Configuration** (AC: #19-23) 🔴 RED
+  - [ ] 25.1 Créer `docs/tests/starlight.test.ts`
+  - [ ] 25.2 Écrire test `test_starlight_typedoc_configured()` - doit FAIL
+  - [ ] 25.3 Écrire test `test_starlight_sidebar_community_links()` - doit FAIL
+  - [ ] 25.4 Écrire test `test_docs_structure_complete()` - doit FAIL
+  - [ ] 25.5 Vérifier: `cd docs && npm run test` → FAIL
+
+- [ ] **Task 26: IMPL - Starlight Structure** (AC: #20) 🟢 GREEN
+  - [ ] 26.1 Créer `docs/src/content/docs/getting-started/` (introduction.md, installation.md, quick-start.md, configuration.md)
+  - [ ] 26.2 Créer `docs/src/content/docs/architecture/` (overview.md placeholder)
+  - [ ] 26.3 Créer `docs/src/content/docs/api/` (overview.md placeholder)
+  - [ ] 26.4 Créer `docs/src/content/docs/deployment/` (overview.md placeholder)
+  - [ ] 26.5 Créer `docs/src/content/docs/development/` (setup.md placeholder)
+
+- [ ] **Task 27: IMPL - Starlight TypeDoc** (AC: #21) 🟢 GREEN
+  - [ ] 27.1 `cd docs && npm install starlight-typedoc typedoc`
+  - [ ] 27.2 Configurer `astro.config.mjs` avec plugin starlight-typedoc
+  - [ ] 27.3 Configurer entryPoints vers `../web/src/**/*.ts`
+
+- [ ] **Task 28: IMPL - mkdocstrings Workflow** (AC: #22) 🟢 GREEN
+  - [ ] 28.1 Créer `docs/mkdocs.yml` pour génération Python docs
+  - [ ] 28.2 Ajouter mkdocstrings dans requirements-dev.txt
+  - [ ] 28.3 Créer `.github/workflows/generate-python-docs.yml`
+  - [ ] 28.4 Script copie .md générés vers `docs/src/content/docs/api/python/`
+
+- [ ] **Task 29: IMPL - Starlight Sidebar** (AC: #23) 🟢 GREEN
+  - [ ] 29.1 Mettre à jour `docs/astro.config.mjs` sidebar
+  - [ ] 29.2 Section Getting Started (autogenerate)
+  - [ ] 29.3 Section Architecture (autogenerate)
+  - [ ] 29.4 Section API Reference (autogenerate)
+  - [ ] 29.5 Section Deployment (autogenerate)
+  - [ ] 29.6 Section Development (autogenerate)
+  - [ ] 29.7 Section Community avec liens externes:
+    - Contributing → https://github.com/OWNER/UniDash/blob/main/CONTRIBUTING.md
+    - Code of Conduct → https://github.com/OWNER/UniDash/blob/main/CODE_OF_CONDUCT.md
+    - License → https://github.com/OWNER/UniDash/blob/main/LICENSE
+    - Security → https://github.com/OWNER/UniDash/blob/main/SECURITY.md
+  - [ ] 29.8 Vérifier: `cd docs && npm run test` → PASS
+
+### Phase 13: Validation Finale Complète (TODO)
+
+- [ ] **Task 30: Validation Totale** (AC: #1-23)
+  - [ ] 30.1 Exécuter tous les tests Python: `pytest api/ --cov --cov-fail-under=100`
+  - [ ] 30.2 Exécuter tous les tests Frontend: `cd web && npm run test:coverage`
+  - [ ] 30.3 Exécuter tous les tests Docs: `cd docs && npm run test`
+  - [ ] 30.4 Build Starlight: `cd docs && npm run build`
+  - [ ] 30.5 Vérifier GitHub Community Standards 100% sur repo
+  - [ ] 30.6 Commit final: `docs: complete GitHub Community Standards and documentation enforcement`
 
 ## Dev Notes
 
@@ -332,6 +508,10 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - Phase 7: Created 3 GitHub Actions workflows (ci-python, ci-web, docs-deploy)
 - Phase 8: Initialized Starlight documentation
 - Phase 9: All 55 tests pass (49 Python + 6 Frontend)
+- Phase 10: GitHub Community Standards (README, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, issue/PR templates, dependabot)
+- Phase 11: Documentation Enforcement (Ruff D rules, ESLint JSDoc, docs-check workflow, CodeRabbit)
+- Phase 12: Starlight Configuration (starlight-typedoc with conditional loading, mkdocstrings workflow, sidebar Community links, docker-compose.dev.yml)
+- Phase 13: Final Validation - 94 Python tests + 3 docs tests + build pass
 
 ### File List
 
@@ -340,6 +520,12 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - .editorconfig
 - requirements-dev.txt
 - .pre-commit-config.yaml
+- README.md
+- CONTRIBUTING.md
+- CODE_OF_CONDUCT.md
+- SECURITY.md
+- docker-compose.dev.yml
+- Dockerfile.dev
 
 **API packages (src layout PyPA):**
 - api/shared/pyproject.toml, src/unidash_shared/__init__.py
@@ -355,23 +541,36 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - api/shared/tests/test_linters.py
 - api/shared/tests/test_precommit.py
 - api/shared/tests/test_ci_workflows.py
+- api/shared/tests/test_github_standards.py
+- api/shared/tests/test_doc_enforcement.py
+- api/shared/tests/test_starlight_config.py
 - web/tests/setup.test.ts
+- docs/tests/astro-config.test.js
 
 **Frontend:**
 - web/ (Astro + React + Tailwind)
-- web/eslint.config.js
+- web/eslint.config.js (with eslint-plugin-jsdoc)
 - web/.prettierrc
 - web/vitest.config.ts
 
 **Documentation:**
 - docs/ (Starlight)
-- docs/astro.config.mjs
+- docs/astro.config.mjs (with starlight-typedoc conditional loading)
+- docs/mkdocs.yml
 - docs/src/content/docs/getting-started/
+- docs/src/content/docs/development/setup.md
+- docs/src/content/docs/api/python/
 
 **CI/CD:**
 - .github/workflows/ci-python.yml
 - .github/workflows/ci-web.yml
 - .github/workflows/docs-deploy.yml
+- .github/workflows/docs-check.yml
+- .github/workflows/generate-python-docs.yml
+- .github/dependabot.yml
+- .github/ISSUE_TEMPLATE/ (bug_report.yml, feature_request.yml, question.yml, config.yml)
+- .github/PULL_REQUEST_TEMPLATE.md
+- .coderabbit.yaml
 
 **Infrastructure (directories):**
 - infra/ansible/playbooks/

@@ -1,326 +1,188 @@
 # Sprint Status - UniDash
 # Updated: 2026-01-10
-# Current Sprint: Documentation & GitHub Setup
+# Current Sprint: Infrastructure Setup
 
 generated: "2026-01-10"
 updated: "2026-01-10"
 project: "UniDash"
-current_sprint: "Sprint 0 - Documentation & Contribution Guidelines"
+current_sprint: "Sprint 1 - Infrastructure"
 
 # ═══════════════════════════════════════════════════════════════
-# EPIC 0: Documentation & GitHub Best Practices (PRIORITY)
+# DOCUMENTATION POLICY
 # ═══════════════════════════════════════════════════════════════
-# This epic must be completed before continuing with Epic 1
-# It establishes the project documentation and contribution workflow
-#
-# STRATEGY:
-# - All documentation lives in Starlight (docs/)
-# - Root files (README, CONTRIBUTING, etc.) link to Starlight
-# - Single source of truth = Starlight
+# - Documentation is part of each story, not a separate epic
+# - Story 1.1 includes initial setup (GitHub Standards + Starlight + CI)
+# - Each subsequent story updates Starlight docs as needed
+# - CI blocks PRs without proper documentation (docstrings, JSDoc, Starlight)
+# - Language: English only (code, comments, docs, commits)
 
-epic_0_documentation:
-  title: "Documentation & GitHub Best Practices"
-  status: in_progress
-  branch: "feature/epic-0-documentation"
-  base_branch: "develop"
-  stories:
-    # ─────────────────────────────────────────────────────────────
-    # ROOT FILES (link to Starlight for details)
-    # ─────────────────────────────────────────────────────────────
-    - id: "0-1"
-      title: "README.md + Starlight Homepage"
-      status: pending
-      branch: "feature/0-1-readme"
-      file: null
-      outputs:
-        - "README.md"
-        - "docs/src/content/docs/index.mdx"
-      description: |
-        README principal + page d'accueil Starlight:
-        ROOT README.md:
-        - Description courte du projet
-        - Badges (CI, coverage, license)
-        - Quick links vers Starlight docs
-        - Screenshot/preview
-
-        STARLIGHT index.mdx:
-        - Description complete du projet
-        - Vision et objectifs
-        - Features principales
-        - Architecture overview (avec diagramme)
-        - Quick start guide
-
-    - id: "0-2"
-      title: "CODE_OF_CONDUCT.md + Starlight Community Page"
-      status: pending
-      branch: "feature/0-2-code-of-conduct"
-      file: null
-      outputs:
-        - "CODE_OF_CONDUCT.md"
-        - "docs/src/content/docs/community/code-of-conduct.md"
-      description: |
-        Code de conduite:
-        ROOT: Contributor Covenant standard
-        STARLIGHT: Version complete avec:
-        - Standards de comportement
-        - Responsabilites des mainteneurs
-        - Processus de signalement
-        - Application et consequences
-        - Enable "Repository admins accept content reports" sur GitHub
-
-    - id: "0-3"
-      title: "CONTRIBUTING.md + Starlight Contributing Guide"
-      status: pending
-      branch: "feature/0-3-contributing"
-      file: null
-      outputs:
-        - "CONTRIBUTING.md"
-        - "docs/src/content/docs/community/contributing.md"
-        - "docs/src/content/docs/development/gitflow.md"
-        - "docs/src/content/docs/development/commit-conventions.md"
-      description: |
-        Guide de contribution:
-        ROOT: Resume avec lien vers Starlight
-        STARLIGHT pages detaillees:
-        - Workflow GitFlow complet (diagrammes)
-        - Conventional Commits (exemples)
-        - Process de Pull Request
-        - Review guidelines
-        - Code style (Ruff, Black, Prettier)
-        - Testing requirements (TDD, coverage 100%)
-
-    - id: "0-4"
-      title: "LICENSE"
-      status: pending
-      branch: "feature/0-4-license"
-      file: null
-      outputs:
-        - "LICENSE"
-        - "docs/src/content/docs/community/license.md"
-      description: |
-        Fichier de licence:
-        ROOT: Fichier LICENSE complet
-        STARLIGHT: Page expliquant la licence et ses implications
-
-    - id: "0-5"
-      title: "SECURITY.md + Starlight Security Policy"
-      status: pending
-      branch: "feature/0-5-security"
-      file: null
-      outputs:
-        - "SECURITY.md"
-        - "docs/src/content/docs/community/security.md"
-      description: |
-        Politique de securite:
-        ROOT: Resume avec lien
-        STARLIGHT:
-        - Versions supportees
-        - Comment signaler une vulnerabilite
-        - Processus de reponse
-        - Delai de correction attendu
-        - Hall of fame (optionnel)
-
-    - id: "0-6"
-      title: "Issue Templates + Starlight Issue Guide"
-      status: pending
-      branch: "feature/0-6-issue-templates"
-      file: null
-      outputs:
-        - ".github/ISSUE_TEMPLATE/bug_report.yml"
-        - ".github/ISSUE_TEMPLATE/feature_request.yml"
-        - ".github/ISSUE_TEMPLATE/question.yml"
-        - ".github/ISSUE_TEMPLATE/config.yml"
-        - "docs/src/content/docs/community/reporting-issues.md"
-      description: |
-        Templates d'issues GitHub (format YAML forms):
-        - Bug report avec champs structures
-        - Feature request avec user story format
-        - Question/Support
-        - Config pour le chooser
-        STARLIGHT: Guide comment bien reporter un bug/demander une feature
-
-    - id: "0-7"
-      title: "Pull Request Template + Starlight PR Guide"
-      status: pending
-      branch: "feature/0-7-pr-template"
-      file: null
-      outputs:
-        - ".github/PULL_REQUEST_TEMPLATE.md"
-        - "docs/src/content/docs/development/pull-requests.md"
-      description: |
-        Template de PR:
-        ROOT: Template avec checklist
-        STARLIGHT: Guide complet:
-        - Comment preparer une PR
-        - Checklist (tests, docs, breaking changes)
-        - Description format
-        - Related issues linking
-        - Review process
-
-    - id: "0-8"
-      title: "Dependabot + Starlight Dependencies Guide"
-      status: pending
-      branch: "feature/0-8-dependabot"
-      file: null
-      outputs:
-        - ".github/dependabot.yml"
-        - "docs/src/content/docs/development/dependencies.md"
-      description: |
-        Configuration Dependabot:
-        ROOT: Config pour Python pip, npm, GitHub Actions
-        STARLIGHT:
-        - Politique de mise a jour des deps
-        - Comment gerer les PRs Dependabot
-        - Security updates policy
-
-    # ─────────────────────────────────────────────────────────────
-    # STARLIGHT DOCUMENTATION SECTIONS
-    # ─────────────────────────────────────────────────────────────
-    - id: "0-9"
-      title: "Starlight - Getting Started Section"
-      status: pending
-      branch: "feature/0-9-getting-started"
-      file: null
-      outputs:
-        - "docs/src/content/docs/getting-started/introduction.md"
-        - "docs/src/content/docs/getting-started/installation.md"
-        - "docs/src/content/docs/getting-started/quick-start.md"
-        - "docs/src/content/docs/getting-started/configuration.md"
-      description: |
-        Section Getting Started complete:
-        - Introduction (vision, use cases, features)
-        - Installation (prerequisites, methods)
-        - Quick Start (5-minute guide)
-        - Configuration (basic setup)
-
-    - id: "0-10"
-      title: "Starlight - Architecture Section"
-      status: pending
-      branch: "feature/0-10-architecture-docs"
-      file: null
-      outputs:
-        - "docs/src/content/docs/architecture/overview.md"
-        - "docs/src/content/docs/architecture/apis.md"
-        - "docs/src/content/docs/architecture/frontend.md"
-        - "docs/src/content/docs/architecture/infrastructure.md"
-        - "docs/src/content/docs/architecture/security.md"
-        - "docs/src/content/docs/architecture/decisions.md"
-      description: |
-        Documentation architecture:
-        - Overview (diagrammes Mermaid systeme complet)
-        - APIs (db, sso, unidash, admin, backup)
-        - Frontend (Astro, React Islands, Nanostores)
-        - Infrastructure (K3S, PostgreSQL, Redis)
-        - Security (auth cascade, sessions, permissions)
-        - ADRs (Architecture Decision Records)
-
-    - id: "0-11"
-      title: "Starlight - API Reference Section"
-      status: pending
-      branch: "feature/0-11-api-reference"
-      file: null
-      outputs:
-        - "docs/src/content/docs/api/overview.md"
-        - "docs/src/content/docs/api/authentication.md"
-        - "docs/src/content/docs/api/json-api-format.md"
-        - "docs/src/content/docs/api/db-api.md"
-        - "docs/src/content/docs/api/sso-api.md"
-        - "docs/src/content/docs/api/unidash-api.md"
-        - "docs/src/content/docs/api/admin-api.md"
-        - "docs/src/content/docs/api/backup-api.md"
-      description: |
-        Reference API complete:
-        - Overview (conventions, versioning)
-        - Authentication (sessions, tokens)
-        - JSON:API format (structure, errors, pagination)
-        - Endpoints par service avec exemples
-
-    - id: "0-12"
-      title: "Starlight - Deployment Section"
-      status: pending
-      branch: "feature/0-12-deployment-docs"
-      file: null
-      outputs:
-        - "docs/src/content/docs/deployment/prerequisites.md"
-        - "docs/src/content/docs/deployment/k3s-setup.md"
-        - "docs/src/content/docs/deployment/networking.md"
-        - "docs/src/content/docs/deployment/ssl-certificates.md"
-        - "docs/src/content/docs/deployment/monitoring.md"
-        - "docs/src/content/docs/deployment/backup-restore.md"
-        - "docs/src/content/docs/deployment/troubleshooting.md"
-      description: |
-        Guide de deploiement complet:
-        - Prerequisites (hardware, OS, network)
-        - K3S Setup (single node, HA cluster)
-        - Networking (VPN, reverse proxy)
-        - SSL/TLS (cert-manager, Let's Encrypt)
-        - Monitoring (Prometheus, Grafana, Loki)
-        - Backup/Restore (Velero)
-        - Troubleshooting (common issues)
-
-    - id: "0-13"
-      title: "Starlight - Development Section"
-      status: pending
-      branch: "feature/0-13-development-docs"
-      file: null
-      outputs:
-        - "docs/src/content/docs/development/setup.md"
-        - "docs/src/content/docs/development/project-structure.md"
-        - "docs/src/content/docs/development/testing.md"
-        - "docs/src/content/docs/development/debugging.md"
-        - "docs/src/content/docs/development/ide-setup.md"
-      description: |
-        Guide developpeur:
-        - Setup environnement local (Python venv, Node)
-        - Structure du projet (monorepo layout)
-        - Testing (pytest, vitest, TDD workflow)
-        - Debugging tips
-        - IDE setup (VSCode extensions, settings)
+documentation_policy:
+  principle: "Documentation is part of each story, not a separate epic"
+  language: "English only"
+  enforcement:
+    - "Ruff D rules - Python docstrings (blocking)"
+    - "eslint-plugin-jsdoc - TypeScript JSDoc (blocking)"
+    - "Custom action - Starlight update check (blocking)"
+    - "CodeRabbit AI - code review (advisory)"
+  auto_generation:
+    python: "mkdocstrings → docs/api/reference/"
+    typescript: "starlight-typedoc → docs/api/reference/"
 
 # ═══════════════════════════════════════════════════════════════
-# EPIC 1: Infrastructure (A faire apres Epic 0)
+# EPIC 1: Infrastructure
 # ═══════════════════════════════════════════════════════════════
+# L'Admin Deploie un Cluster Pret a l'Emploi
+# FRs: FR1, FR2, FR3, FR4, FR5
+# NFRs: NFR5, NFR6, NFR9, NFR11
+
 epic_1_infrastructure:
   title: "L'Admin Deploie un Cluster Pret a l'Emploi"
-  status: pending
+  status: in_progress
   branch: "feature/epic-1-infrastructure"
   base_branch: "develop"
   stories:
     - id: "1-1"
       title: "Initialisation du Projet UniDash"
-      status: done
+      status: in_progress
       branch: "feature/1-1-project-init"
       file: "_bmad-output/implementation-artifacts/1-1-initialisation-du-projet-unidash.md"
+      includes_initial_setup: true
+      phases_done:
+        - "Phase 1-9: Project structure, packages, linters, CI (55 tests)"
+      phases_todo:
+        - "Phase 10: GitHub Community Standards (README, CONTRIBUTING, etc.)"
+        - "Phase 11: Documentation Enforcement (Ruff D, ESLint JSDoc, CodeRabbit)"
+        - "Phase 12: Starlight Configuration (typedoc, mkdocstrings, sidebar)"
+        - "Phase 13: Final Validation"
+      description: |
+        Project structure + GitHub Community Standards + Starlight + CI:
+        - Repository structure (src layout PyPA) ✅
+        - Linters basic setup (Ruff, Black, ESLint, Prettier) ✅
+        - CI/CD basic workflows ✅
+
+        TODO:
+        - GitHub Community Standards 100% (README, CONTRIBUTING, LICENSE, SECURITY, templates)
+        - Documentation enforcement (Ruff D rules, ESLint JSDoc, CodeRabbit AI)
+        - Starlight advanced config (typedoc, mkdocstrings, Community links)
+        - Auto-generation API docs setup
+
     - id: "1-2"
       title: "Installation du Premier Noeud K3S"
       status: pending
       branch: "feature/1-2-k3s-first-node"
       file: null
+      docs_required: "docs/deployment/k3s-setup.md"
+      description: |
+        K3S server installation via wizard
+        Doc: K3S setup guide in Starlight
+
     - id: "1-3"
       title: "Ajout de Noeuds au Cluster K3S HA"
       status: pending
       branch: "feature/1-3-k3s-ha-nodes"
       file: null
+      docs_required: "docs/deployment/k3s-setup.md (update)"
+      description: |
+        Add nodes for HA cluster (3+ nodes)
+        Doc: Update K3S setup with HA section
+
     - id: "1-4"
       title: "Configuration VPN L2TP/IPsec"
       status: pending
       branch: "feature/1-4-vpn-setup"
       file: null
+      docs_required: "docs/deployment/networking.md"
+      description: |
+        VPN server configuration (strongSwan)
+        Doc: VPN setup guide in Starlight
+
     - id: "1-5"
       title: "Gestion Automatique des Certificats SSL"
       status: pending
       branch: "feature/1-5-ssl-certificates"
       file: null
+      docs_required: "docs/deployment/ssl-certificates.md"
+      description: |
+        cert-manager + Let's Encrypt
+        Doc: SSL/TLS guide in Starlight
+
     - id: "1-6"
       title: "Configuration Reverse Proxy HAProxy"
       status: pending
       branch: "feature/1-6-haproxy"
       file: null
+      docs_required: "docs/deployment/networking.md (update)"
+      description: |
+        HAProxy for HTTP/TCP routing
+        Doc: Update networking with reverse proxy section
+
     - id: "1-7"
       title: "Configuration Nginx Stream pour Traffic UDP"
       status: pending
       branch: "feature/1-7-nginx-udp"
       file: null
+      docs_required: "docs/deployment/networking.md (update)"
+      description: |
+        Nginx stream for UDP (VPN ports)
+        Doc: Update networking with UDP section
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 2: Authentification (pending - after Epic 1)
+# ═══════════════════════════════════════════════════════════════
+epic_2_auth:
+  title: "Authentification & Gestion des Identites"
+  status: pending
+  stories_count: 8
+  docs_sections:
+    - "docs/architecture/security.md"
+    - "docs/api/authentication.md"
+    - "docs/api/sso-api.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 3: Store (pending - after Epic 2)
+# ═══════════════════════════════════════════════════════════════
+epic_3_store:
+  title: "Store & Installation d'Applications"
+  status: pending
+  stories_count: 9
+  docs_sections:
+    - "docs/getting-started/installation.md"
+    - "docs/api/unidash-api.md"
+    - "docs/architecture/apis.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 4: Bureau Web (pending - after Epic 3)
+# ═══════════════════════════════════════════════════════════════
+epic_4_desktop:
+  title: "Bureau Web & Experience Utilisateur"
+  status: pending
+  stories_count: 13
+  docs_sections:
+    - "docs/getting-started/quick-start.md"
+    - "docs/architecture/frontend.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 5: Permissions (pending - after Epic 2)
+# ═══════════════════════════════════════════════════════════════
+epic_5_permissions:
+  title: "Permissions & Controle d'Acces"
+  status: pending
+  stories_count: 5
+  docs_sections:
+    - "docs/architecture/security.md (update)"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 6: Administration (pending - after Epic 3)
+# ═══════════════════════════════════════════════════════════════
+epic_6_admin:
+  title: "Administration & Observabilite"
+  status: pending
+  stories_count: 7
+  docs_sections:
+    - "docs/deployment/monitoring.md"
+    - "docs/deployment/backup-restore.md"
+    - "docs/api/admin-api.md"
+    - "docs/api/backup-api.md"
 
 # ═══════════════════════════════════════════════════════════════
 # GITFLOW WORKFLOW
@@ -333,65 +195,22 @@ gitflow:
   release_prefix: "release/"
   hotfix_prefix: "hotfix/"
 
-  workflow: |
-    1. Create feature branch from develop:
-       git checkout develop
-       git pull origin develop
-       git checkout -b feature/X-Y-story-name
-
-    2. Work on feature with commits:
-       git commit -m "feat(scope): description"
-
-    3. Push and create PR to develop:
-       git push -u origin feature/X-Y-story-name
-       gh pr create --base develop
-
-    4. After PR merge, delete feature branch:
-       git checkout develop
-       git pull origin develop
-       git branch -d feature/X-Y-story-name
-
 # ═══════════════════════════════════════════════════════════════
 # SUMMARY
 # ═══════════════════════════════════════════════════════════════
 summary:
-  total_epics: 7
-  total_stories: 62
-  stories_done: 1
-  stories_in_progress: 0
-  stories_pending: 61
-  current_epic: "Epic 0 - Documentation"
-  next_story: "0-1"
-  next_branch: "feature/0-1-readme"
-
-  documentation_strategy: |
-    Single source of truth = Starlight (docs/)
-    Root files (README, CONTRIBUTING, etc.) = summaries with links to Starlight
-    All detailed documentation lives in Starlight for:
-    - Consistent navigation
-    - Search functionality
-    - Version control
-    - Better UX
-
-  github_community_standards:
-    readme: "0-1"
-    code_of_conduct: "0-2"
-    contributing: "0-3"
-    license: "0-4"
-    security: "0-5"
-    issue_templates: "0-6"
-    pr_template: "0-7"
-    dependabot: "0-8"
-
-  starlight_sections:
-    getting_started: "0-9"
-    architecture: "0-10"
-    api_reference: "0-11"
-    deployment: "0-12"
-    development: "0-13"
+  total_epics: 6
+  total_stories: 49
+  stories_done: 0
+  stories_in_progress: 1
+  stories_pending: 48
+  current_epic: "Epic 1 - Infrastructure"
+  current_story: "1-1"
+  current_branch: "feature/1-1-project-init"
+  next_story: "1-2"
+  next_branch: "feature/1-2-k3s-first-node"
 
   progress:
-    epic_0: "0/13 (0%)"
     epic_1: "1/7 (14%)"
     epic_2: "0/8 (0%)"
     epic_3: "0/9 (0%)"
