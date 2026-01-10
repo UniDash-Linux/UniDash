@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniDash - Design Directions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --surface: #F8FAFC;
+            --border: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --accent: #3B82F6;
+            --accent-hover: #2563EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --dock-width: 56px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        .dark {
+            --bg: #0F172A;
+            --surface: #1E293B;
+            --border: #334155;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --accent: #60A5FA;
+            --accent-hover: #3B82F6;
+            --success: #34D399;
+            --warning: #FBBF24;
+            --error: #F87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn:hover {
+            background: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Sidebar navigation */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 240px;
+            bottom: 0;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .direction-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 4px;
+        }
+
+        .direction-btn:hover {
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+
+        .direction-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 240px;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+            padding: 32px;
+        }
+
+        .mockup-container {
+            display: none;
+        }
+
+        .mockup-container.active {
+            display: block;
+        }
+
+        .mockup-header {
+            margin-bottom: 24px;
+        }
+
+        .mockup-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .mockup-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        /* Desktop Mockup Frame */
+        .desktop-frame {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            height: 600px;
+            display: flex;
+        }
+
+        /* Dock Styles */
+        .dock {
+            width: var(--dock-width);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dock-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .dock-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .dock-icon:hover svg {
+            color: white;
+        }
+
+        .dock-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .dock-icon.active::after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .dock-spacer {
+            flex: 1;
+        }
+
+        /* Dock group - App drawer + Dock switcher collés */
+        .dock-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .dock-group .dock-icon {
+            border-radius: 0;
+        }
+
+        .dock-group .dock-icon:first-child {
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            border-bottom: none;
+        }
+
+        .dock-group .dock-icon:last-child {
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        }
+
+        /* Séparateur après dock-group */
+        .dock-separator {
+            width: 24px;
+            height: 1px;
+            background: var(--border);
+            margin: 4px auto;
+            align-self: center;
+        }
+
+        /* Workspace */
+        .workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: url('background.png') center/cover no-repeat;
+        }
+
+        /* Tiling layouts */
+        .tiling-area {
+            flex: 1;
+            padding: 16px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .tiling-full { grid-template-columns: 1fr; }
+        .tiling-2col { grid-template-columns: 1fr 1fr; }
+        .tiling-2col-70 { grid-template-columns: 7fr 3fr; }
+        .tiling-3col { grid-template-columns: 1fr 1fr 1fr; }
+        .tiling-quad { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+
+        /* Window/App Panel */
+        .app-panel {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-md);
+        }
+
+        .app-titlebar {
+            height: 36px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+        }
+
+        .app-titlebar-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+
+        .app-titlebar-text {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .window-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .window-btn.close { background: #EF4444; }
+        .window-btn.minimize { background: #F59E0B; }
+        .window-btn.maximize { background: #10B981; }
+
+        /* Navigation buttons for iframe */
+        .nav-controls-iframe {
+            display: flex;
+            gap: 4px;
+            margin-right: 8px;
+        }
+
+        .nav-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--surface);
+            border-color: var(--accent);
+        }
+
+        .nav-btn svg {
+            width: 14px;
+            height: 14px;
+            color: var(--text-secondary);
+        }
+
+        .nav-btn:hover svg {
+            color: var(--accent);
+        }
+
+        .app-content {
+            flex: 1;
+            padding: 16px;
+            overflow: auto;
+        }
+
+        /* Store mockup */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .store-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .store-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .store-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            margin-bottom: 12px;
+        }
+
+        .store-card-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 4px;
+        }
+
+        .store-card-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Accent color variations */
+        .accent-purple { --accent: #8B5CF6; --accent-hover: #7C3AED; }
+        .accent-green { --accent: #10B981; --accent-hover: #059669; }
+        .accent-orange { --accent: #FB923C; --accent-hover: #F97316; }
+        .accent-pink { --accent: #F472B6; --accent-hover: #EC4899; }
+        .accent-teal { --accent: #2DD4BF; --accent-hover: #14B8A6; }
+
+        .dark.accent-purple { --accent: #A78BFA; --accent-hover: #8B5CF6; }
+        .dark.accent-green { --accent: #34D399; --accent-hover: #10B981; }
+        .dark.accent-orange { --accent: #FDBA74; --accent-hover: #FB923C; }
+        .dark.accent-pink { --accent: #F9A8D4; --accent-hover: #F472B6; }
+        .dark.accent-teal { --accent: #5EEAD4; --accent-hover: #2DD4BF; }
+
+        /* Direction-specific styles */
+        .direction-compact .dock { width: 48px; padding: 8px 6px; }
+        .direction-compact .dock-icon { width: 36px; height: 36px; }
+        .direction-compact .dock-icon.active::after { left: -6px; height: 12px; width: 2px; }
+        .direction-compact .tiling-area { padding: 12px; gap: 12px; }
+
+        .direction-spacious .dock { width: 72px; padding: 16px 12px; }
+        .direction-spacious .dock-icon { width: 48px; height: 48px; border-radius: var(--radius-md); }
+        .direction-spacious .tiling-area { padding: 24px; gap: 24px; }
+
+        .direction-minimal .dock { background: transparent; border: none; }
+        .direction-minimal .app-panel { border: none; box-shadow: var(--shadow-lg); }
+        .direction-minimal .app-titlebar { background: transparent; border: none; }
+        .direction-minimal .tiling-area { padding: 16px; }
+        .direction-minimal .dock-separator { margin: 4px auto; }
+
+        /* Mobile frame */
+        .mobile-frame {
+            width: 375px;
+            height: 700px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        .mobile-status-bar {
+            height: 28px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .mobile-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .mobile-app-header {
+            height: 52px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 10px;
+        }
+
+        .mobile-app-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+        }
+
+        .mobile-app-title {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .mobile-nav-btns {
+            display: flex;
+            gap: 4px;
+        }
+
+        .mobile-nav-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mobile-nav-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .mobile-nav-btn svg {
+            width: 16px;
+            height: 16px;
+            color: var(--text-secondary);
+        }
+
+        .mobile-app-content {
+            flex: 1;
+            padding: 16px;
+            overflow: auto;
+        }
+
+        .mobile-bottom-bar {
+            height: 56px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 8px;
+        }
+
+        .mobile-dock-icons {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .mobile-dock-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .mobile-dock-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .mobile-dock-icon:hover svg {
+            color: white;
+        }
+
+        .mobile-dock-icon.active {
+            border-color: var(--accent);
+            border-width: 2px;
+        }
+
+        /* Mobile dock group - 2 demi-cercles joints */
+        .mobile-dock-group {
+            display: flex;
+            gap: 0;
+        }
+
+        .mobile-dock-group .mobile-dock-icon {
+            border-radius: 0;
+        }
+
+        .mobile-dock-group .mobile-dock-icon:first-child {
+            border-radius: 50% 0 0 50%;
+            border-right: none;
+        }
+
+        .mobile-dock-group .mobile-dock-icon:last-child {
+            border-radius: 0 50% 50% 0;
+        }
+
+        /* Séparateur mobile après dock-group */
+        .mobile-dock-separator {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 4px;
+            align-self: center;
+        }
+
+        .mobile-dock-icon svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .mobile-dock-spacer {
+            flex: 1;
+        }
+
+        .mobile-dock-overflow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .mobile-dock-overflow:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .mobile-dock-overflow:hover svg {
+            color: white;
+        }
+
+        .mobile-dock-overflow svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile window controls - x2 size */
+        .mobile-window-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .mobile-window-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-window-btn.minimize {
+            background: #F59E0B;
+        }
+
+        .mobile-window-btn.close {
+            background: #EF4444;
+        }
+
+        /* Placeholder content */
+        .placeholder-text {
+            height: 12px;
+            background: var(--border);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .placeholder-text.short { width: 60%; }
+        .placeholder-text.medium { width: 80%; }
+
+        .placeholder-chart {
+            height: 120px;
+            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        /* Tags */
+        .tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-title">UniDash - Directions de Design</div>
+        <div class="nav-controls">
+            <button class="btn" onclick="toggleTheme()" id="themeBtn">Dark Mode</button>
+            <button class="btn" onclick="setAccent('blue')">Blue</button>
+            <button class="btn" onclick="setAccent('purple')">Purple</button>
+            <button class="btn" onclick="setAccent('green')">Green</button>
+            <button class="btn" onclick="setAccent('orange')">Orange</button>
+            <button class="btn" onclick="setAccent('pink')">Pink</button>
+            <button class="btn" onclick="setAccent('teal')">Teal</button>
+        </div>
+    </nav>
+
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Directions de Design</div>
+            <button class="direction-btn active" onclick="showDirection('standard')">1. Standard</button>
+            <button class="direction-btn" onclick="showDirection('compact')">2. Compact</button>
+            <button class="direction-btn" onclick="showDirection('spacious')">3. Spacieux</button>
+            <button class="direction-btn" onclick="showDirection('minimal')">4. Minimal</button>
+            <button class="direction-btn" onclick="showDirection('store')">5. Store</button>
+            <button class="direction-btn" onclick="showDirection('wizard')">6. Wizard</button>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Layouts Tiling</div>
+            <button class="direction-btn" onclick="showDirection('desktop')">Bureau</button>
+            <button class="direction-btn" onclick="showDirection('tiling-full')">Plein écran</button>
+            <button class="direction-btn" onclick="showDirection('tiling-2col')">2 colonnes</button>
+            <button class="direction-btn" onclick="showDirection('tiling-3col')">3 colonnes</button>
+            <button class="direction-btn" onclick="showDirection('tiling-quad')">4 quadrants</button>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Responsive</div>
+            <button class="direction-btn" onclick="showDirection('mobile')">Mobile</button>
+            <button class="direction-btn" onclick="showDirection('mobile-desktop')">Bureau (Mobile)</button>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Composants</div>
+            <button class="direction-btn" onclick="showDirection('app-drawer')">Tiroir Apps (Desktop)</button>
+            <button class="direction-btn" onclick="showDirection('app-drawer-mobile')">Tiroir Apps (Mobile)</button>
+            <button class="direction-btn" onclick="showDirection('dock-switcher')">Sélecteur Dock (Desktop)</button>
+            <button class="direction-btn" onclick="showDirection('dock-switcher-mobile')">Sélecteur Dock (Mobile)</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <!-- Direction 1: Standard -->
+        <div class="mockup-container active" id="standard">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 1: Standard</h1>
+                <p class="mockup-desc">Le design de référence avec dock latéral gauche, tiling 2 colonnes, et polish macOS. Équilibre optimal entre densité et lisibilité.</p>
+                <div class="tags">
+                    <span class="tag">Dock 56px</span>
+                    <span class="tag">Tiling 2 colonnes</span>
+                    <span class="tag">Border radius 12px</span>
+                    <span class="tag">Shadows macOS</span>
+                </div>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <!-- Groupe App Drawer + Dock Switcher -->
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <!-- Apps du dock -->
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-2col">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Nextcloud</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-chart" style="margin-top: 16px;"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                <span class="app-titlebar-text">Portainer</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text short"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 2: Compact -->
+        <div class="mockup-container" id="compact">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 2: Compact</h1>
+                <p class="mockup-desc">Version plus dense pour maximiser l'espace des apps. Dock réduit, marges minimales, idéal pour écrans plus petits ou utilisateurs power-user.</p>
+                <div class="tags">
+                    <span class="tag">Dock 48px</span>
+                    <span class="tag">Gaps 12px</span>
+                    <span class="tag">Padding minimal</span>
+                    <span class="tag">High density</span>
+                </div>
+            </div>
+            <div class="desktop-frame direction-compact">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-3col">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">App 1</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text short"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);"></div>
+                                <span class="app-titlebar-text">App 2</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                <span class="app-titlebar-text">App 3</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-text medium"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 3: Spacious -->
+        <div class="mockup-container" id="spacious">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 3: Spacieux</h1>
+                <p class="mockup-desc">Design aéré avec plus d'espace blanc. Dock plus large, marges généreuses, idéal pour une expérience premium et relaxante.</p>
+                <div class="tags">
+                    <span class="tag">Dock 72px</span>
+                    <span class="tag">Gaps 24px</span>
+                    <span class="tag">Padding généreux</span>
+                    <span class="tag">Low density</span>
+                </div>
+            </div>
+            <div class="desktop-frame direction-spacious">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-full">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Nextcloud Files</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-chart" style="margin-top: 24px; height: 200px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 4: Minimal -->
+        <div class="mockup-container" id="minimal">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 4: Minimal</h1>
+                <p class="mockup-desc">Design épuré sans bordures visibles. Dock transparent, fenêtres flottantes avec ombres, style Linear ultra-minimaliste.</p>
+                <div class="tags">
+                    <span class="tag">No borders</span>
+                    <span class="tag">Shadow-based depth</span>
+                    <span class="tag">Transparent dock</span>
+                    <span class="tag">Linear-style</span>
+                </div>
+            </div>
+            <div class="desktop-frame direction-minimal">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-2col-70">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Main App</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-chart" style="margin-top: 16px;"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #F472B6, #EC4899);"></div>
+                                <span class="app-titlebar-text">Sidebar</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 5: Store -->
+        <div class="mockup-container" id="store">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 5: Store Personnel</h1>
+                <p class="mockup-desc">Le Store Personnel style macOS App Store avec cards épurées, screenshots, et filtres intégrés discrets (chips/dropdown).</p>
+                <div class="tags">
+                    <span class="tag">macOS App Store style</span>
+                    <span class="tag">Cards épurées</span>
+                    <span class="tag">Filtres chips</span>
+                    <span class="tag">Grid responsive</span>
+                </div>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-full">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, var(--accent), var(--accent-hover));"></div>
+                                <span class="app-titlebar-text">Store Personnel</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <!-- Search bar -->
+                                <div style="position: relative; margin-bottom: 16px;">
+                                    <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                                    <input type="text" placeholder="Rechercher une application..." style="width: 100%; padding: 10px 12px 10px 40px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); font-size: 0.875rem; color: var(--text); outline: none;">
+                                </div>
+                                <!-- Filter chips -->
+                                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                                    <span class="tag" style="background: var(--accent); color: white; border-color: var(--accent);">Toutes</span>
+                                    <span class="tag">Productivité</span>
+                                    <span class="tag">Développement</span>
+                                    <span class="tag">Médias</span>
+                                    <span class="tag">Monitoring</span>
+                                </div>
+                                <div class="store-grid">
+                                    <div class="store-card">
+                                        <div class="store-card-icon"></div>
+                                        <div class="store-card-title">Nextcloud</div>
+                                        <div class="store-card-desc">Cloud storage & collaboration</div>
+                                    </div>
+                                    <div class="store-card">
+                                        <div class="store-card-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                        <div class="store-card-title">Portainer</div>
+                                        <div class="store-card-desc">Container management</div>
+                                    </div>
+                                    <div class="store-card">
+                                        <div class="store-card-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);"></div>
+                                        <div class="store-card-title">Gitea</div>
+                                        <div class="store-card-desc">Git self-hosted</div>
+                                    </div>
+                                    <div class="store-card">
+                                        <div class="store-card-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);"></div>
+                                        <div class="store-card-title">Grafana</div>
+                                        <div class="store-card-desc">Monitoring & dashboards</div>
+                                    </div>
+                                    <div class="store-card">
+                                        <div class="store-card-icon" style="background: linear-gradient(135deg, #EF4444, #DC2626);"></div>
+                                        <div class="store-card-title">Jellyfin</div>
+                                        <div class="store-card-desc">Media server</div>
+                                    </div>
+                                    <div class="store-card">
+                                        <div class="store-card-icon" style="background: linear-gradient(135deg, #06B6D4, #0891B2);"></div>
+                                        <div class="store-card-title">Vaultwarden</div>
+                                        <div class="store-card-desc">Password manager</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 6: Wizard -->
+        <div class="mockup-container" id="wizard">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Direction 6: Wizard Installation</h1>
+                <p class="mockup-desc">Le wizard d'installation style Vercel avec étapes claires, progression visible, et one-click deployment.</p>
+                <div class="tags">
+                    <span class="tag">Vercel-style</span>
+                    <span class="tag">Progress steps</span>
+                    <span class="tag">One-click</span>
+                    <span class="tag">Minimal distraction</span>
+                </div>
+            </div>
+            <div class="desktop-frame" style="background: url('background.png') center/cover no-repeat;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px;">
+                    <div style="max-width: 480px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+                        <!-- Progress -->
+                        <div style="display: flex; gap: 8px; margin-bottom: 48px;">
+                            <div style="flex: 1; height: 4px; background: var(--accent); border-radius: 2px;"></div>
+                            <div style="flex: 1; height: 4px; background: var(--accent); border-radius: 2px;"></div>
+                            <div style="flex: 1; height: 4px; background: var(--border); border-radius: 2px;"></div>
+                            <div style="flex: 1; height: 4px; background: var(--border); border-radius: 2px;"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Configuration du cluster</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 32px;">UniDash va configurer K3S sur votre serveur. Cela prend environ 2 minutes.</p>
+
+                        <!-- Form -->
+                        <div style="margin-bottom: 24px;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Nom du cluster</label>
+                            <input type="text" value="mon-cluster" style="width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text-primary); font-size: 1rem;">
+                        </div>
+
+                        <div style="margin-bottom: 32px;">
+                            <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 8px;">Domaine</label>
+                            <input type="text" value="unidash.example.com" style="width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text-primary); font-size: 1rem;">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div style="display: flex; gap: 12px;">
+                            <button style="padding: 12px 24px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-primary); font-size: 0.875rem; font-weight: 500; cursor: pointer;">Retour</button>
+                            <button style="flex: 1; padding: 12px 24px; border: none; border-radius: var(--radius-sm); background: var(--accent); color: white; font-size: 0.875rem; font-weight: 500; cursor: pointer;">Continuer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bureau / Desktop vide avec icônes centrées -->
+        <div class="mockup-container" id="desktop">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Bureau</h1>
+                <p class="mockup-desc">Vue du bureau sans application ouverte. Le groupe d'icônes (tiroir + sélecteur de dock) est centré au milieu de l'écran.</p>
+                <div class="tags">
+                    <span class="tag">Bureau vide</span>
+                    <span class="tag">Icônes centrées</span>
+                    <span class="tag">Wallpaper</span>
+                </div>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace" style="display: flex; align-items: center; justify-content: center;">
+                    <!-- Groupe d'icônes centré sur le bureau -->
+                    <div style="display: flex; gap: 12px; padding: 16px 24px; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                        <!-- App 1 -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                            <div style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #3B82F6, #2563EB); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(59,130,246,0.4);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 28px; height: 28px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                            </div>
+                            <span style="font-size: 0.6875rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Accueil</span>
+                        </div>
+                        <!-- App 2 -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                            <div style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 28px; height: 28px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </div>
+                            <span style="font-size: 0.6875rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Portainer</span>
+                        </div>
+                        <!-- App 3 -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                            <div style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(245,158,11,0.4);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 28px; height: 28px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                            </div>
+                            <span style="font-size: 0.6875rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Grafana</span>
+                        </div>
+                        <!-- App 4 -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                            <div style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139,92,246,0.4);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 28px; height: 28px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <span style="font-size: 0.6875rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Nextcloud</span>
+                        </div>
+                        <!-- App 5 -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                            <div style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(239,68,68,0.4);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 28px; height: 28px;"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                            </div>
+                            <span style="font-size: 0.6875rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Jellyfin</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiling Full -->
+        <div class="mockup-container" id="tiling-full">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Layout: Plein écran</h1>
+                <p class="mockup-desc">Une seule app en plein écran. Mode focus pour une utilisation intensive d'une application.</p>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-full">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Nextcloud</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-chart" style="margin-top: 24px; height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiling 2col -->
+        <div class="mockup-container" id="tiling-2col">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Layout: 2 colonnes</h1>
+                <p class="mockup-desc">Deux apps côte à côte en 50/50. Multitâche léger.</p>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-2col">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Nextcloud</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-chart" style="margin-top: 16px;"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                <span class="app-titlebar-text">Portainer</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-chart" style="margin-top: 16px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiling 3col -->
+        <div class="mockup-container" id="tiling-3col">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Layout: 3 colonnes</h1>
+                <p class="mockup-desc">Trois apps côte à côte en 33/33/33. Pour power-users ou comparaison multi-services.</p>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-3col">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Nextcloud</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-chart" style="margin-top: 12px; height: 100px;"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                <span class="app-titlebar-text">Portainer</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-chart" style="margin-top: 12px; height: 100px;"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);"></div>
+                                <span class="app-titlebar-text">Grafana</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-chart" style="margin-top: 12px; height: 100px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiling Quad -->
+        <div class="mockup-container" id="tiling-quad">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Layout: 4 quadrants</h1>
+                <p class="mockup-desc">Quatre apps en grille 2x2. Dashboard, monitoring multi-services.</p>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon active">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace">
+                    <div class="tiling-area tiling-quad">
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="app-titlebar-icon"></div>
+                                <span class="app-titlebar-text">Grafana</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-chart"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #10B981, #059669);"></div>
+                                <span class="app-titlebar-text">Portainer</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text short"></div>
+                                <div class="placeholder-text"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);"></div>
+                                <span class="app-titlebar-text">Logs</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text"></div>
+                                <div class="placeholder-text medium"></div>
+                            </div>
+                        </div>
+                        <div class="app-panel">
+                            <div class="app-titlebar">
+                                <div class="nav-controls-iframe">
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+                                    <button class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+                                </div>
+                                <div class="app-titlebar-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);"></div>
+                                <span class="app-titlebar-text">Alerts</span>
+                                <div class="window-controls">
+                                    <button class="window-btn minimize"></button>
+                                    <button class="window-btn maximize"></button>
+                                    <button class="window-btn close"></button>
+                                </div>
+                            </div>
+                            <div class="app-content">
+                                <div class="placeholder-text medium"></div>
+                                <div class="placeholder-text short"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile -->
+        <div class="mockup-container" id="mobile">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Vue Mobile</h1>
+                <p class="mockup-desc">Une seule app en plein écran, barre de navigation en bas avec menu overflow, gros boutons style Android. Pas de bouton fullscreen car mobile = toujours fullscreen.</p>
+                <div class="tags">
+                    <span class="tag">Fullscreen only</span>
+                    <span class="tag">Bottom bar</span>
+                    <span class="tag">Android-style buttons</span>
+                    <span class="tag">No borders</span>
+                </div>
+            </div>
+            <div class="mobile-frame">
+                <div class="mobile-status-bar">
+                    <span>9:41</span>
+                </div>
+                <div class="mobile-content">
+                    <div class="mobile-app-header">
+                        <div class="mobile-nav-btns">
+                            <button class="mobile-nav-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <button class="mobile-nav-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
+                        </div>
+                        <div class="mobile-app-icon"></div>
+                        <span class="mobile-app-title">Nextcloud</span>
+                        <div class="mobile-window-controls">
+                            <button class="mobile-window-btn minimize">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </button>
+                            <button class="mobile-window-btn close">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mobile-app-content">
+                        <div class="placeholder-text"></div>
+                        <div class="placeholder-text medium"></div>
+                        <div class="placeholder-text short"></div>
+                        <div class="placeholder-chart" style="margin-top: 16px; height: 150px;"></div>
+                        <div class="placeholder-text" style="margin-top: 16px;"></div>
+                        <div class="placeholder-text medium"></div>
+                    </div>
+                </div>
+                <div class="mobile-bottom-bar">
+                    <div class="mobile-dock-icons">
+                        <!-- Groupe App Drawer + Dock Switcher (2 demi-cercles joints) -->
+                        <div class="mobile-dock-group">
+                            <div class="mobile-dock-icon" title="Tiroir d'applications">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            </div>
+                            <div class="mobile-dock-icon" title="Changer de dock">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                            </div>
+                        </div>
+                        <div class="mobile-dock-separator"></div>
+                        <div class="mobile-dock-icon active">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        </div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                    </div>
+                    <div class="mobile-dock-spacer"></div>
+                    <button class="mobile-dock-overflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bureau Mobile -->
+        <div class="mockup-container" id="mobile-desktop">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Bureau - Mobile</h1>
+                <p class="mockup-desc">Vue du bureau mobile sans application ouverte. Les icônes d'applications sont centrées au milieu de l'écran avec le wallpaper en fond.</p>
+                <div class="tags">
+                    <span class="tag">Bureau vide</span>
+                    <span class="tag">Icônes centrées</span>
+                    <span class="tag">Wallpaper</span>
+                </div>
+            </div>
+            <div class="mobile-frame">
+                <div class="mobile-status-bar">
+                    <span>9:41</span>
+                </div>
+                <!-- Bureau avec icônes centrées -->
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: url('background.png') center/cover no-repeat; padding: 24px;">
+                    <!-- Groupe d'icônes centré -->
+                    <div style="display: flex; flex-direction: column; gap: 16px; padding: 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.2);">
+                        <!-- Ligne 1 -->
+                        <div style="display: flex; gap: 16px;">
+                            <!-- App 1 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #3B82F6, #2563EB); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(59,130,246,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Accueil</span>
+                            </div>
+                            <!-- App 2 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16,185,129,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Portainer</span>
+                            </div>
+                            <!-- App 3 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(245,158,11,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Grafana</span>
+                            </div>
+                        </div>
+                        <!-- Ligne 2 -->
+                        <div style="display: flex; gap: 16px;">
+                            <!-- App 4 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(139,92,246,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Nextcloud</span>
+                            </div>
+                            <!-- App 5 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(239,68,68,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Jellyfin</span>
+                            </div>
+                            <!-- App 6 -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #06B6D4, #0891B2); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(6,182,212,0.4);">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 26px; height: 26px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Réglages</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bottom bar -->
+                <div class="mobile-bottom-bar">
+                    <div class="mobile-dock-icons">
+                        <div class="mobile-dock-group">
+                            <div class="mobile-dock-icon" title="Tiroir d'applications">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            </div>
+                            <div class="mobile-dock-icon" title="Changer de dock">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                            </div>
+                        </div>
+                        <div class="mobile-dock-separator"></div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        </div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                    </div>
+                    <div class="mobile-dock-spacer"></div>
+                    <button class="mobile-dock-overflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Drawer / Tiroir d'applications - Desktop -->
+        <div class="mockup-container" id="app-drawer">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Tiroir d'Applications - Desktop</h1>
+                <p class="mockup-desc">Popup qui s'ouvre à côté du dock (70% de la hauteur). Accessible via le bouton grille dans le dock. Permet de voir, rechercher et lancer toutes les apps activées.</p>
+                <div class="tags">
+                    <span class="tag">Popup 70% hauteur</span>
+                    <span class="tag">Grille d'icônes</span>
+                    <span class="tag">Recherche rapide</span>
+                    <span class="tag">Catégories</span>
+                </div>
+            </div>
+            <div class="desktop-frame">
+                <!-- Dock avec icône grille active -->
+                <div class="dock">
+                    <!-- Groupe App Drawer (ACTIF) + Dock Switcher -->
+                    <div class="dock-group">
+                        <div class="dock-icon active" style="background: var(--accent);" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <!-- Workspace avec tiroir ouvert -->
+                <div class="workspace" style="position: relative;">
+                    <!-- Tiroir popup (70% hauteur, collé en haut) -->
+                    <div style="position: absolute; top: 12px; left: 12px; width: 320px; height: 70%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-xl); display: flex; flex-direction: column; overflow: hidden; z-index: 100;">
+                        <!-- Header tiroir -->
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 600; font-size: 0.9375rem;">Applications</span>
+                            <button style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <!-- Recherche -->
+                        <div style="padding: 12px 16px;">
+                            <div style="position: relative;">
+                                <svg style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                                <input type="text" placeholder="Rechercher..." style="width: 100%; padding: 8px 10px 8px 32px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-size: 0.8125rem; color: var(--text-primary); outline: none;">
+                            </div>
+                        </div>
+                        <!-- Filtres -->
+                        <div style="padding: 0 16px 12px; display: flex; gap: 6px; flex-wrap: wrap;">
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--accent); color: white; font-size: 0.75rem; font-weight: 500;">Toutes</span>
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--text-secondary); font-size: 0.75rem; font-weight: 500; border: 1px solid var(--border);">Prod</span>
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--text-secondary); font-size: 0.75rem; font-weight: 500; border: 1px solid var(--border);">Dev</span>
+                        </div>
+                        <!-- Grille apps -->
+                        <div style="flex: 1; overflow-y: auto; padding: 8px 16px 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <!-- App icons -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-hover)); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Nextcloud</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Portainer</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Gitea</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Grafana</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Jellyfin</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #06B6D4, #0891B2); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Vaultwarden</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #3B82F6, #2563EB); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Code</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #22C55E, #16A34A); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Uptime</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 8px; cursor: pointer;" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                                <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #EC4899, #DB2777); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
+                                </div>
+                                <span style="font-size: 0.6875rem; color: var(--text-secondary); text-align: center;">Photos</span>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div style="padding: 10px 16px; border-top: 1px solid var(--border); font-size: 0.6875rem; color: var(--text-muted);">
+                            9 applications • Clic droit pour options
+                        </div>
+                    </div>
+                    <!-- Fond grisé derrière le tiroir -->
+                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 50;"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- App Drawer Mobile / Tiroir d'applications - Mobile -->
+        <div class="mockup-container" id="app-drawer-mobile">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Tiroir d'Applications - Mobile</h1>
+                <p class="mockup-desc">Plein écran avec marges généreuses. Mêmes fonctionnalités que desktop : recherche, filtres par catégorie, grille d'apps avec icônes.</p>
+                <div class="tags">
+                    <span class="tag">Plein écran</span>
+                    <span class="tag">Marges 24px</span>
+                    <span class="tag">Grille 3 colonnes</span>
+                    <span class="tag">Filtres catégories</span>
+                </div>
+            </div>
+            <div class="mobile-frame">
+                <div class="mobile-status-bar">
+                    <span>9:41</span>
+                </div>
+                <!-- Tiroir mobile plein écran avec marges -->
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: url('background.png') center/cover no-repeat; padding: 20px; position: relative;">
+                    <!-- Overlay assombrissement -->
+                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.5);"></div>
+                    <div style="width: 100%; height: 100%; background: var(--surface); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 1;">
+                        <!-- Header -->
+                        <div style="padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 600; font-size: 0.9375rem;">Applications</span>
+                            <button style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <!-- Recherche -->
+                        <div style="padding: 10px 16px;">
+                            <div style="position: relative;">
+                                <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                                <input type="text" placeholder="Rechercher..." style="width: 100%; padding: 9px 10px 9px 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); font-size: 0.8125rem; color: var(--text-primary); outline: none;">
+                            </div>
+                        </div>
+                        <!-- Filtres catégories -->
+                        <div style="padding: 0 16px 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--accent); color: white; font-size: 0.6875rem; font-weight: 500;">Toutes</span>
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--text-secondary); font-size: 0.6875rem; font-weight: 500; border: 1px solid var(--border);">Prod</span>
+                            <span style="padding: 4px 10px; border-radius: 12px; background: var(--bg); color: var(--text-secondary); font-size: 0.6875rem; font-weight: 500; border: 1px solid var(--border);">Dev</span>
+                        </div>
+                        <!-- Grille apps mobile -->
+                        <div style="flex: 1; overflow-y: auto; padding: 6px 16px 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <!-- App 1 - Nextcloud -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-hover)); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Nextcloud</span>
+                            </div>
+                            <!-- App 2 - Portainer -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Portainer</span>
+                            </div>
+                            <!-- App 3 - Gitea -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Gitea</span>
+                            </div>
+                            <!-- App 4 - Grafana -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Grafana</span>
+                            </div>
+                            <!-- App 5 - Jellyfin -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Jellyfin</span>
+                            </div>
+                            <!-- App 6 - Vaultwarden -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #06B6D4, #0891B2); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Vaultwarden</span>
+                            </div>
+                            <!-- App 7 - Code -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #3B82F6, #2563EB); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Code</span>
+                            </div>
+                            <!-- App 8 - Uptime -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #22C55E, #16A34A); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Uptime</span>
+                            </div>
+                            <!-- App 9 - Photos -->
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 4px; border-radius: 8px; cursor: pointer;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #EC4899, #DB2777); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>
+                                </div>
+                                <span style="font-size: 0.625rem; color: var(--text-secondary); text-align: center;">Photos</span>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div style="padding: 8px 16px; border-top: 1px solid var(--border); font-size: 0.625rem; color: var(--text-muted);">
+                            9 applications • Appui long pour options
+                        </div>
+                    </div>
+                </div>
+                <!-- Bottom bar avec icône grille active -->
+                <div class="mobile-bottom-bar">
+                    <div class="mobile-dock-icons">
+                        <!-- Groupe App Drawer (ACTIF) + Dock Switcher -->
+                        <div class="mobile-dock-group">
+                            <div class="mobile-dock-icon active" style="background: var(--accent); border-color: var(--accent);" title="Tiroir d'applications">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            </div>
+                            <div class="mobile-dock-icon" title="Changer de dock">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                            </div>
+                        </div>
+                        <div class="mobile-dock-separator"></div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        </div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                    </div>
+                    <div class="mobile-dock-spacer"></div>
+                    <button class="mobile-dock-overflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dock Switcher / Sélecteur de Docks Thématiques -->
+        <div class="mockup-container" id="dock-switcher">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Sélecteur de Docks Thématiques</h1>
+                <p class="mockup-desc">Vue du panneau de changement de dock. Les docks thématiques apparaissent en transparence. L'utilisateur peut créer de nouveaux docks avec le bouton +.</p>
+                <div class="tags">
+                    <span class="tag">Docks multiples</span>
+                    <span class="tag">Personnalisation</span>
+                    <span class="tag">Bouton + Ajouter</span>
+                    <span class="tag">Aperçu rapide</span>
+                </div>
+            </div>
+            <div class="desktop-frame">
+                <div class="dock">
+                    <div class="dock-group">
+                        <div class="dock-icon" title="Tiroir d'applications">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div class="dock-icon active" style="background: var(--accent);" title="Changer de dock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </div>
+                    </div>
+                    <div class="dock-separator"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div class="dock-spacer"></div>
+                    <div class="dock-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                </div>
+                <div class="workspace" style="position: relative;">
+                    <!-- Panneau sélecteur de docks (popup) -->
+                    <div style="position: absolute; top: 12px; left: 12px; width: 280px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-xl); display: flex; flex-direction: column; overflow: hidden; z-index: 100;">
+                        <!-- Header -->
+                        <div style="padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 600; font-size: 0.9375rem;">Mes Docks</span>
+                            <button style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <!-- Liste des docks -->
+                        <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dock 1 - Principal (actif) -->
+                            <div style="padding: 12px; border-radius: 8px; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 18px; height: 18px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.875rem;">Principal</div>
+                                    <div style="font-size: 0.6875rem; opacity: 0.8;">4 apps</div>
+                                </div>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 16px; height: 16px;"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <!-- Dock 2 - Monitoring -->
+                            <div style="padding: 12px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 18px; height: 18px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary);">Monitoring</div>
+                                    <div style="font-size: 0.6875rem; color: var(--text-muted);">3 apps</div>
+                                </div>
+                            </div>
+                            <!-- Dock 3 - DevOps -->
+                            <div style="padding: 12px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 18px; height: 18px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary);">DevOps</div>
+                                    <div style="font-size: 0.6875rem; color: var(--text-muted);">5 apps</div>
+                                </div>
+                            </div>
+                            <!-- Dock 4 - Media -->
+                            <div style="padding: 12px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 18px; height: 18px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.875rem; color: var(--text-primary);">Media</div>
+                                    <div style="font-size: 0.6875rem; color: var(--text-muted);">2 apps</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bouton Ajouter un dock -->
+                        <div style="padding: 12px; border-top: 1px solid var(--border);">
+                            <button style="width: 100%; padding: 10px; border-radius: 8px; border: 2px dashed var(--border); background: transparent; color: var(--text-secondary); font-size: 0.8125rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s ease;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Nouveau dock
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Fond grisé -->
+                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 50;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dock Switcher Mobile / Sélecteur de Docks - Mobile -->
+        <div class="mockup-container" id="dock-switcher-mobile">
+            <div class="mockup-header">
+                <h1 class="mockup-title">Sélecteur de Docks - Mobile</h1>
+                <p class="mockup-desc">Version mobile du sélecteur de docks. Plein écran avec marges, liste des docks thématiques et bouton d'ajout.</p>
+                <div class="tags">
+                    <span class="tag">Plein écran</span>
+                    <span class="tag">Liste verticale</span>
+                    <span class="tag">Bouton + Ajouter</span>
+                </div>
+            </div>
+            <div class="mobile-frame">
+                <div class="mobile-status-bar">
+                    <span>9:41</span>
+                </div>
+                <!-- Sélecteur plein écran avec marges -->
+                <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: url('background.png') center/cover no-repeat; padding: 20px; position: relative;">
+                    <!-- Overlay assombrissement -->
+                    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.5);"></div>
+                    <div style="width: 100%; height: 100%; background: var(--surface); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 1;">
+                        <!-- Header -->
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 600;">Mes Docks</span>
+                            <button style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <!-- Liste des docks -->
+                        <div style="flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Dock 1 - Principal (actif) -->
+                            <div style="padding: 14px; border-radius: 12px; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; gap: 14px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.9375rem;">Principal</div>
+                                    <div style="font-size: 0.75rem; opacity: 0.8;">4 applications</div>
+                                </div>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 20px; height: 20px;"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <!-- Dock 2 - Monitoring -->
+                            <div style="padding: 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 14px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #F59E0B, #D97706); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.9375rem; color: var(--text-primary);">Monitoring</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">3 applications</div>
+                                </div>
+                            </div>
+                            <!-- Dock 3 - DevOps -->
+                            <div style="padding: 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 14px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #8B5CF6, #7C3AED); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.9375rem; color: var(--text-primary);">DevOps</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">5 applications</div>
+                                </div>
+                            </div>
+                            <!-- Dock 4 - Media -->
+                            <div style="padding: 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: 14px;">
+                                <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #EF4444, #DC2626); display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width: 22px; height: 22px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 0.9375rem; color: var(--text-primary);">Media</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">2 applications</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Bouton Ajouter un dock -->
+                        <div style="padding: 12px; border-top: 1px solid var(--border);">
+                            <button style="width: 100%; padding: 14px; border-radius: 12px; border: 2px dashed var(--border); background: transparent; color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Nouveau dock
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bottom bar avec icône dock-switcher active -->
+                <div class="mobile-bottom-bar">
+                    <div class="mobile-dock-icons">
+                        <!-- Groupe App Drawer + Dock Switcher (ACTIF) -->
+                        <div class="mobile-dock-group">
+                            <div class="mobile-dock-icon" title="Tiroir d'applications">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            </div>
+                            <div class="mobile-dock-icon active" style="background: var(--accent); border-color: var(--accent);" title="Changer de dock">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                            </div>
+                        </div>
+                        <div class="mobile-dock-separator"></div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                        </div>
+                        <div class="mobile-dock-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                    </div>
+                    <div class="mobile-dock-spacer"></div>
+                    <button class="mobile-dock-overflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let isDark = false;
+        let currentAccent = '';
+
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.classList.toggle('dark', isDark);
+            document.getElementById('themeBtn').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        }
+
+        function setAccent(color) {
+            // Remove all accent classes
+            document.body.classList.remove('accent-purple', 'accent-green', 'accent-orange', 'accent-pink', 'accent-teal');
+
+            if (color !== 'blue') {
+                document.body.classList.add('accent-' + color);
+            }
+            currentAccent = color;
+        }
+
+        function showDirection(id) {
+            // Hide all mockups
+            document.querySelectorAll('.mockup-container').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected mockup
+            document.getElementById(id).classList.add('active');
+
+            // Update sidebar buttons
+            document.querySelectorAll('.direction-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
