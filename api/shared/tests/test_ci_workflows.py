@@ -31,18 +31,12 @@ def test_docs_deploy_workflow_exists() -> None:
 
 def test_workflows_valid_yaml() -> None:
     """Verify all workflow files are valid YAML."""
-    if not WORKFLOWS_DIR.is_dir():
-        return
+    assert WORKFLOWS_DIR.is_dir(), "Missing .github/workflows directory"
 
     for workflow_file in WORKFLOWS_DIR.glob("*.yml"):
         with open(workflow_file) as f:
-            try:
-                config = yaml.safe_load(f)
-                assert config is not None, f"Empty workflow: {workflow_file.name}"
-                assert (
-                    "on" in config or True in config
-                ), f"Missing 'on' trigger in {workflow_file.name}"
-            except yaml.YAMLError as e:
-                raise AssertionError(
-                    f"Invalid YAML in {workflow_file.name}: {e}"
-                ) from e
+            config = yaml.safe_load(f)
+            assert config is not None, f"Empty workflow: {workflow_file.name}"
+            assert (
+                "on" in config or True in config
+            ), f"Missing 'on' trigger in {workflow_file.name}"

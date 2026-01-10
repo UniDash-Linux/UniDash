@@ -306,6 +306,35 @@ Les administrateurs peuvent surveiller, maintenir et sauvegarder l'infrastructur
 
 ---
 
+## Continuous Documentation Policy
+
+**Principe :** La documentation fait partie intégrante de chaque story, pas un epic séparé.
+
+**Language :** English only (code comments, docstrings, JSDoc, Starlight docs, commits, PRs)
+
+**Règles :**
+1. **Story 1.1** inclut le setup initial complet :
+   - GitHub Community Standards (README, CONTRIBUTING, LICENSE, SECURITY, templates)
+   - Starlight documentation structure
+   - CI/CD with documentation enforcement
+2. **Chaque story** met à jour la documentation Starlight correspondante
+3. **CI bloque** les PRs sans documentation (docstrings, JSDoc, Starlight)
+
+**Documentation par story :**
+
+| Type de story | Documentation requise |
+|---------------|----------------------|
+| Infrastructure | `docs/deployment/` |
+| API | `docs/api/` + OpenAPI auto |
+| Frontend | `docs/getting-started/` |
+| Architecture majeure | `docs/architecture/` |
+
+**Enforcement automatique (CI) :**
+- `Ruff D rules` (Python) - 100% docstring coverage (Google style)
+- `eslint-plugin-jsdoc` (TypeScript) - JSDoc on exports
+- Custom action - Starlight update required based on changed files
+- `CodeRabbit AI` - AI code review (advisory)
+
 ## Flux de Dependances
 
 ```
@@ -327,20 +356,41 @@ Epic 1 (Infrastructure)
 ### Story 1.1: Initialisation du Projet UniDash
 
 As a **developpeur**,
-I want **une structure de projet initialisee avec les outils de developpement**,
-So that **je puisse commencer le developpement avec les bonnes pratiques**.
+I want **une structure de projet initialisee avec les outils de developpement et la documentation**,
+So that **je puisse commencer le developpement avec les bonnes pratiques et une documentation automatisee**.
 
 **Acceptance Criteria:**
 
 **Given** un repository git vide
 **When** le script d'initialisation est execute
 **Then** la structure de repertoires est creee selon project-context.md
-**And** les fichiers pyproject.toml sont configures pour chaque API
-**And** les linters (Ruff, Black, ESLint, Prettier) sont configures
+**And** les fichiers pyproject.toml sont configures pour chaque API (avec Ruff docstring rules)
+**And** les linters (Ruff, Black, ESLint, Prettier) sont configures avec documentation enforcement
 **And** les hooks pre-commit sont installes
-**And** le workflow CI GitHub Actions de base est cree
+**And** le workflow CI GitHub Actions est cree avec:
+  - Tests + coverage 100%
+  - Docstring/JSDoc enforcement (blocking)
+  - Starlight docs check (blocking)
+  - CodeRabbit AI review (advisory)
+  - Auto-generation API docs (mkdocstrings + starlight-typedoc)
 
-**Couvre:** AR2, AR7, AR8, AR9 (enablement story)
+**GitHub Community Standards (100%):**
+**And** README.md est cree (English, liens vers Starlight)
+**And** CONTRIBUTING.md est cree (English, GitFlow, Conventional Commits)
+**And** CODE_OF_CONDUCT.md est cree (Contributor Covenant v2.1)
+**And** LICENSE est cree (MIT)
+**And** SECURITY.md est cree (English)
+**And** .github/ISSUE_TEMPLATE/ est configure (bug, feature, question)
+**And** .github/PULL_REQUEST_TEMPLATE.md est cree
+**And** .github/dependabot.yml est configure
+
+**Starlight Documentation:**
+**And** docs/ est initialise avec Astro Starlight
+**And** la structure de base est creee (getting-started/, architecture/, api/, deployment/, development/)
+**And** starlight-typedoc est configure pour auto-generation
+**And** la sidebar est configuree avec liens Community vers GitHub .md
+
+**Couvre:** AR2, AR7, AR8, AR9, Documentation Policy (enablement story)
 
 ---
 

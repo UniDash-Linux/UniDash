@@ -1,0 +1,73 @@
+name: Documentation Check
+
+on:
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  check-docs:
+    name: Check Documentation Updates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files_yaml: |
+            api:
+              - 'api/**'
+            web_features:
+              - 'web/src/features/**'
+            infra:
+              - 'infra/**'
+            docs:
+              - 'docs/**'
+
+      - name: Check API documentation
+        if: steps.changed-files.outputs.api_any_changed == 'true'
+        run: |
+          echo "API files changed. Checking for docs/api/ updates..."
+          if [ "${{ steps.changed-files.outputs.docs_any_changed }}" != "true" ]; then
+            echo "::warning::API changes detected but no documentation updates found."
+            echo "Consider updating docs/api/ to reflect API changes."
+            # Check for skip-docs label
+            if [ "${{ contains(github.event.pull_request.labels.*.name, 'skip-docs') }}" != "true" ]; then
+              echo "::error::Documentation update required for API changes. Add 'skip-docs' label to bypass."
+              exit 1
+            fi
+          fi
+
+      - name: Check Frontend documentation
+        if: steps.changed-files.outputs.web_features_any_changed == 'true'
+        run: |
+          echo "Frontend feature files changed. Checking for docs/ updates..."
+          if [ "${{ steps.changed-files.outputs.docs_any_changed }}" != "true" ]; then
+            echo "::warning::Frontend feature changes detected but no documentation updates found."
+            echo "Consider updating docs/getting-started/ or docs/architecture/."
+            if [ "${{ contains(github.event.pull_request.labels.*.name, 'skip-docs') }}" != "true" ]; then
+              echo "::error::Documentation update required for feature changes. Add 'skip-docs' label to bypass."
+              exit 1
+            fi
+          fi
+
+      - name: Check Infrastructure documentation
+        if: steps.changed-files.outputs.infra_any_changed == 'true'
+        run: |
+          echo "Infrastructure files changed. Checking for docs/deployment/ updates..."
+          if [ "${{ steps.changed-files.outputs.docs_any_changed }}" != "true" ]; then
+            echo "::warning::Infrastructure changes detected but no documentation updates found."
+            echo "Consider updating docs/deployment/."
+            if [ "${{ contains(github.event.pull_request.labels.*.name, 'skip-docs') }}" != "true" ]; then
+              echo "::error::Documentation update required for infrastructure changes. Add 'skip-docs' label to bypass."
+              exit 1
+            fi
+          fi
+
+      - name: Documentation check passed
+        run: echo "Documentation check completed successfully."
