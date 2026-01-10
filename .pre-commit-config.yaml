@@ -29,12 +29,18 @@ repos:
       - id: black
         language_version: python3
 
-  # Frontend: Prettier
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+  # Frontend: Prettier (uses local prettier from web/ and docs/)
+  - repo: local
     hooks:
-      - id: prettier
-        types_or: [javascript, jsx, ts, tsx, json, yaml, markdown, astro]
-        additional_dependencies:
-          - prettier@3.3.3
-          - prettier-plugin-astro@0.14.1
+      - id: prettier-web
+        name: prettier (web)
+        entry: bash -c 'cd web && npx prettier --write --ignore-unknown "${@#web/}"' --
+        language: system
+        files: ^web/
+        types_or: [javascript, jsx, ts, tsx, json, css, astro]
+      - id: prettier-docs
+        name: prettier (docs)
+        entry: bash -c 'cd docs && npx prettier --write --ignore-unknown "${@#docs/}"' --
+        language: system
+        files: ^docs/
+        types_or: [javascript, jsx, ts, tsx, json, markdown, mdx, astro]
