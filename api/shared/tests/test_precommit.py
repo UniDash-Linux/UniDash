@@ -19,8 +19,7 @@ def test_precommit_config_valid() -> None:
     import yaml
 
     config_path = PROJECT_ROOT / ".pre-commit-config.yaml"
-    if not config_path.is_file():
-        return  # Skip if file doesn't exist
+    assert config_path.is_file(), "Missing .pre-commit-config.yaml"
 
     with open(config_path) as f:
         config = yaml.safe_load(f)
