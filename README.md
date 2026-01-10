@@ -1,26 +1,26 @@
 # UniDash
 
-[![CI Python](https://github.com/OWNER/UniDash/actions/workflows/ci-python.yml/badge.svg)](https://github.com/OWNER/UniDash/actions/workflows/ci-python.yml)
-[![CI Web](https://github.com/OWNER/UniDash/actions/workflows/ci-web.yml/badge.svg)](https://github.com/OWNER/UniDash/actions/workflows/ci-web.yml)
-[![Documentation](https://github.com/OWNER/UniDash/actions/workflows/docs-deploy.yml/badge.svg)](https://OWNER.github.io/UniDash/)
+[![CI Python](https://github.com/UniDash-Linux/UniDash/actions/workflows/ci-python.yml/badge.svg)](https://github.com/UniDash-Linux/UniDash/actions/workflows/ci-python.yml)
+[![CI Web](https://github.com/UniDash-Linux/UniDash/actions/workflows/ci-web.yml/badge.svg)](https://github.com/UniDash-Linux/UniDash/actions/workflows/ci-web.yml)
+[![Documentation](https://github.com/UniDash-Linux/UniDash/actions/workflows/docs-deploy.yml/badge.svg)](https://UniDash-Linux.github.io/UniDash/)
 [![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL_v2.1-blue.svg)](LICENSE)
 
 UniDash is a self-hosted web desktop platform that provides a unified interface for managing and accessing multiple web applications through a single authentication system.
 
 ## Documentation
 
-Full documentation is available at: **[UniDash Documentation](https://OWNER.github.io/UniDash/)**
+Full documentation is available at: **[UniDash Documentation](https://UniDash-Linux.github.io/UniDash/)**
 
-- [Getting Started](https://OWNER.github.io/UniDash/getting-started/introduction/)
-- [Architecture](https://OWNER.github.io/UniDash/architecture/overview/)
-- [API Reference](https://OWNER.github.io/UniDash/api/overview/)
-- [Deployment Guide](https://OWNER.github.io/UniDash/deployment/overview/)
+- [Getting Started](https://UniDash-Linux.github.io/UniDash/getting-started/introduction/)
+- [Architecture](https://UniDash-Linux.github.io/UniDash/architecture/overview/)
+- [API Reference](https://UniDash-Linux.github.io/UniDash/api/overview/)
+- [Deployment Guide](https://UniDash-Linux.github.io/UniDash/deployment/overview/)
 
 ## Quick Start
 
 ### Prerequisites
 
-- Python 3.14+
+- Python 3.13+
 - Node.js 20+
 - Docker (for development containers)
 
@@ -28,7 +28,7 @@ Full documentation is available at: **[UniDash Documentation](https://OWNER.gith
 
 ```bash
 # Clone the repository
-git clone https://github.com/OWNER/UniDash.git
+git clone https://github.com/UniDash-Linux/UniDash.git
 cd UniDash
 
 # Install Python dependencies
@@ -49,7 +49,7 @@ pytest api/ --cov --cov-fail-under=100
 cd web && npm run test:coverage
 ```
 
-For detailed setup instructions, see the [Development Guide](https://OWNER.github.io/UniDash/development/setup/).
+For detailed setup instructions, see the [Development Guide](https://UniDash-Linux.github.io/UniDash/development/setup/).
 
 ## Features
 
@@ -61,7 +61,7 @@ For detailed setup instructions, see the [Development Guide](https://OWNER.githu
 
 ## Project Structure
 
-```
+```text
 UniDash/
 ├── api/                    # Backend Python packages (FastAPI)
 │   ├── shared/             # Shared utilities (unidash_shared)

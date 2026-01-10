@@ -21,7 +21,7 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a w
 
 ### Prerequisites
 
-- Python 3.14+
+- Python 3.13+
 - Node.js 20+
 - Git
 
@@ -29,7 +29,7 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a w
 
 ```bash
 # Clone the repository
-git clone https://github.com/OWNER/UniDash.git
+git clone https://github.com/UniDash-Linux/UniDash.git
 cd UniDash
 
 # Create Python virtual environment
@@ -52,13 +52,13 @@ cd web && npm install && cd ..
 cd docs && npm install && cd ..
 ```
 
-For more details, see the [Development Guide](https://OWNER.github.io/UniDash/development/setup/).
+For more details, see the [Development Guide](https://UniDash-Linux.github.io/UniDash/development/setup/).
 
 ## GitFlow
 
 We use GitFlow branching strategy:
 
-```
+```text
 main          ← Production, always stable
 develop       ← Integration branch
 feature/*     ← New features (from develop)
@@ -91,7 +91,7 @@ bugfix/*      ← Bug fixes (from develop)
 
 All commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -192,7 +192,7 @@ cd docs && npm run test
 
 ### Test Structure
 
-```
+```text
 api/<service>/tests/
 └── unidash_<service>/
     ├── unit/
