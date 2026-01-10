@@ -7,8 +7,6 @@ and CodeRabbit AI configuration are properly set up.
 import json
 from pathlib import Path
 
-import pytest
-
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
 
@@ -23,9 +21,7 @@ class TestRuffDocstringRules:
     def test_ruff_docstring_rules_enabled(self) -> None:
         """Verify Ruff D rules are enabled for docstrings."""
         ruff_toml = PROJECT_ROOT / "ruff.toml"
-        if not ruff_toml.is_file():
-            pytest.skip("ruff.toml does not exist yet")
-
+        assert ruff_toml.is_file(), "Missing required file: ruff.toml"
         content = ruff_toml.read_text()
         assert (
             '"D"' in content or "'D'" in content
@@ -34,9 +30,7 @@ class TestRuffDocstringRules:
     def test_ruff_pydocstyle_convention(self) -> None:
         """Verify Ruff uses Google style docstrings."""
         ruff_toml = PROJECT_ROOT / "ruff.toml"
-        if not ruff_toml.is_file():
-            pytest.skip("ruff.toml does not exist yet")
-
+        assert ruff_toml.is_file(), "Missing required file: ruff.toml"
         content = ruff_toml.read_text()
         assert (
             "google" in content.lower()
@@ -54,9 +48,7 @@ class TestESLintJSDocRules:
     def test_eslint_jsdoc_plugin_installed(self) -> None:
         """Verify eslint-plugin-jsdoc is in package.json."""
         package_json = PROJECT_ROOT / "web" / "package.json"
-        if not package_json.is_file():
-            pytest.skip("package.json does not exist yet")
-
+        assert package_json.is_file(), "Missing required file: web/package.json"
         content = json.loads(package_json.read_text())
         dev_deps = content.get("devDependencies", {})
         assert (
@@ -66,9 +58,7 @@ class TestESLintJSDocRules:
     def test_eslint_jsdoc_rules_configured(self) -> None:
         """Verify JSDoc rules are configured in eslint.config.js."""
         eslint_config = PROJECT_ROOT / "web" / "eslint.config.js"
-        if not eslint_config.is_file():
-            pytest.skip("eslint.config.js does not exist yet")
-
+        assert eslint_config.is_file(), "Missing required file: web/eslint.config.js"
         content = eslint_config.read_text()
         assert "jsdoc" in content, "eslint.config.js should configure jsdoc plugin"
 
@@ -86,9 +76,9 @@ class TestDocsCheckWorkflow:
     def test_docs_check_workflow_validates_api_docs(self) -> None:
         """Verify workflow checks api/ changes require docs/api/ updates."""
         workflow = PROJECT_ROOT / ".github" / "workflows" / "docs-check.yml"
-        if not workflow.is_file():
-            pytest.skip("docs-check.yml does not exist yet")
-
+        assert (
+            workflow.is_file()
+        ), "Missing required file: .github/workflows/docs-check.yml"
         content = workflow.read_text()
         assert "api/" in content, "docs-check.yml should check api/ directory"
         assert "docs/" in content, "docs-check.yml should check docs/ directory"
@@ -105,9 +95,7 @@ class TestCodeRabbitConfig:
     def test_coderabbit_language_english(self) -> None:
         """Verify CodeRabbit is configured for English reviews."""
         coderabbit = PROJECT_ROOT / ".coderabbit.yaml"
-        if not coderabbit.is_file():
-            pytest.skip(".coderabbit.yaml does not exist yet")
-
+        assert coderabbit.is_file(), "Missing required file: .coderabbit.yaml"
         content = coderabbit.read_text()
         assert (
             "english" in content.lower() or "en" in content.lower()
