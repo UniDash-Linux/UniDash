@@ -1,0 +1,35 @@
+# Ruff configuration for UniDash
+# https://docs.astral.sh/ruff/configuration/
+
+target-version = "py314"
+line-length = 88
+src = ["api/*/src"]
+
+[lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by black)
+]
+
+[lint.isort]
+known-first-party = [
+    "unidash_shared",
+    "unidash_db",
+    "unidash_sso",
+    "unidash_api",
+    "unidash_admin",
+    "unidash_backup",
+]
+
+[lint.per-file-ignores]
+"**/tests/**" = ["ARG"]  # Allow unused arguments in tests

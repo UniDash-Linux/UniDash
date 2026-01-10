@@ -43,7 +43,7 @@ development_status:
   # EPIC 1: L'Admin Deploie un Cluster Pret a l'Emploi (7 stories)
   # ═══════════════════════════════════════════════════════════════
   epic-1: in-progress
-  1-1-initialisation-du-projet-unidash: ready-for-dev
+  1-1-initialisation-du-projet-unidash: done
   1-2-installation-du-premier-noeud-k3s: backlog
   1-3-ajout-de-noeuds-au-cluster-k3s-ha: backlog
   1-4-configuration-vpn-l2tp-ipsec: backlog
