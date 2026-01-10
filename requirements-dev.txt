@@ -1,0 +1,17 @@
+# Development dependencies for UniDash
+# Install with: pip install -r requirements-dev.txt
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=6.0.0
+pytest-asyncio>=0.24.0
+
+# Linting & Formatting
+ruff>=0.8.0
+black>=24.0.0
+
+# Pre-commit hooks
+pre-commit>=4.0.0
+
+# Type checking
+mypy>=1.13.0
