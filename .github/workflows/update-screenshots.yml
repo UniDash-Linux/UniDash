@@ -45,14 +45,23 @@ jobs:
       - name: Install pngquant
         run: sudo apt-get install -y pngquant
 
+      - name: Hash existing screenshots
+        id: hash-before
+        run: |
+          if [ -d docs/src/assets/screenshots ]; then
+            find docs/src/assets/screenshots -name '*.png' -exec sha256sum {} \; | sort > /tmp/before.txt
+          else
+            touch /tmp/before.txt
+          fi
+
       - name: Generate screenshots
         run: node scripts/generate-screenshots.mjs
 
       - name: Check for changes
         id: changes
         run: |
-          git add docs/src/assets/screenshots/
-          if git diff --cached --quiet docs/src/assets/screenshots/; then
+          find docs/src/assets/screenshots -name '*.png' -exec sha256sum {} \; | sort > /tmp/after.txt
+          if diff -q /tmp/before.txt /tmp/after.txt > /dev/null; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
