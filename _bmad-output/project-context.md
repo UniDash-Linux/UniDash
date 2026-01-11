@@ -19,7 +19,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 | Domain | Technology | Version | Notes |
 |--------|------------|---------|-------|
-| **Backend** | Python | 3.14 | EOL Oct 2030 - choix stratégique 5 ans |
+| **Backend** | Python | 3.13 | EOL Oct 2029 - version stable |
 | **API Framework** | FastAPI + Uvicorn | latest | Async native |
 | **ORM** | SQLAlchemy 2.0 + Alembic | 2.0+ | Nouvelle API async |
 | **Auth libs** | python-ldap, authlib | latest | AD/OIDC support |
@@ -44,7 +44,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ### Critical Version Constraints
 
-- **Python 3.14 minimum** - EOL Oct 2030, choix stratégique pour 5 ans de support
+- **Python 3.13 minimum** - EOL Oct 2029, version stable actuelle
 - **SQLAlchemy 2.0+** - Utiliser la nouvelle API async, pas l'ancienne API 1.x
 - **Tailwind v4** - Nouvelle architecture de configuration (pas v3)
 - **Astro 5+** - View Transitions API requise pour navigation fluide
