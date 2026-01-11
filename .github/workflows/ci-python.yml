@@ -3,29 +3,36 @@ name: Python CI
 on:
   push:
     branches: [main, develop]
-    paths:
-      - "api/**"
-      - ".github/workflows/ci-python.yml"
   pull_request:
     branches: [main, develop]
-    paths:
-      - "api/**"
-      - ".github/workflows/ci-python.yml"
 
 jobs:
-  test:
+  changes:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.13"]
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            python:
+              - 'api/**'
+              - '.github/workflows/ci-python.yml'
+
+  test:
+    needs: changes
+    if: needs.changes.outputs.python == 'true'
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -43,7 +50,16 @@ jobs:
         run: |
           pytest api/shared/tests/ --cov=api --cov-report=term-missing --cov-fail-under=100
 
+  test-skipped:
+    needs: changes
+    if: needs.changes.outputs.python != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No Python changes detected, skipping tests"
+
   lint:
+    needs: changes
+    if: needs.changes.outputs.python == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -61,3 +77,10 @@ jobs:
 
       - name: Run black
         run: black --check api/
+
+  lint-skipped:
+    needs: changes
+    if: needs.changes.outputs.python != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No Python changes detected, skipping lint"

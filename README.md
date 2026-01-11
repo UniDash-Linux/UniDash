@@ -7,6 +7,38 @@
 
 UniDash is a self-hosted web desktop platform that provides a unified interface for managing and accessing multiple web applications through a single authentication system.
 
+## UI Mockups
+
+> **Note:** These are design mockups representing the planned interface, not the final implementation.
+
+### Desktop Interface
+
+| Light Mode | Dark Mode |
+|------------|-----------|
+| ![Desktop Light](docs/src/assets/screenshots/desktop-icons-light.png) | ![Desktop Dark](docs/src/assets/screenshots/desktop-icons-dark.png) |
+
+### Tiling Window Management
+
+| 2 Columns | 4 Quadrants |
+|-----------|-------------|
+| ![Tiling 2 Columns](docs/src/assets/screenshots/tiling-2col-light.png) | ![Tiling Quad](docs/src/assets/screenshots/tiling-quad-dark.png) |
+
+### App Store
+
+| Light Mode | Dark Mode |
+|------------|-----------|
+| ![Store Light](docs/src/assets/screenshots/store-light.png) | ![Store Dark](docs/src/assets/screenshots/store-dark.png) |
+
+### Mobile Interface
+
+| App View | Desktop View |
+|----------|--------------|
+| ![Mobile App](docs/src/assets/screenshots/mobile-light.png) | ![Mobile Desktop](docs/src/assets/screenshots/mobile-desktop-dark.png) |
+
+### Installation Wizard
+
+![Installation Wizard](docs/src/assets/screenshots/wizard-light.png)
+
 ## Documentation
 
 Full documentation is available at: **[UniDash Documentation](https://UniDash-Linux.github.io/UniDash/)**
