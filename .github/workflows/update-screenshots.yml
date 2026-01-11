@@ -51,7 +51,12 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet docs/src/assets/screenshots/ || echo "changed=true" >> $GITHUB_OUTPUT
+          git add docs/src/assets/screenshots/
+          if git diff --cached --quiet docs/src/assets/screenshots/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Pull Request
         if: steps.changes.outputs.changed == 'true'
