@@ -30,14 +30,7 @@ describe("hasTypeScriptFiles", () => {
   });
 
   it("should ignore .d.ts declaration files", () => {
-    // env.d.ts exists but should be ignored
-    const tsFiles = globSync("../web/src/**/*.d.ts", {
-      cwd: docsRoot,
-    });
-    // There should be env.d.ts
-    expect(tsFiles.length).toBeGreaterThanOrEqual(0);
-
-    // But hasTypeScriptFiles should still return false
+    // env.d.ts exists but should be ignored by hasTypeScriptFiles
     const result = hasTypeScriptFiles();
     expect(result).toBe(false);
   });
@@ -51,7 +44,11 @@ describe("glob patterns", () => {
       cwd: docsRoot,
       ignore: ["**/*.d.ts", "**/env.d.ts"],
     });
-    // Currently no files, but pattern is valid
-    expect(Array.isArray(files)).toBe(true);
+
+    // Verify only .ts and .tsx files would match (no .d.ts)
+    files.forEach((f) => {
+      expect(f).toMatch(/\.(ts|tsx)$/);
+      expect(f).not.toMatch(/\.d\.ts$/);
+    });
   });
 });

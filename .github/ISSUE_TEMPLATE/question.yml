@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thanks for your question! Please check the documentation first:
-        https://OWNER.github.io/UniDash/
+        https://UniDash-Linux.github.io/UniDash/
 
   - type: textarea
     id: question
