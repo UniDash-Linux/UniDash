@@ -3,6 +3,8 @@ name: Update Screenshots
 on:
   push:
     branches: [develop]
+  pull_request:
+    branches: [develop, main]
   workflow_dispatch:
 
 jobs:
@@ -51,7 +53,7 @@ jobs:
           git diff --quiet docs/src/assets/screenshots/ || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Create Pull Request
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed == 'true' && github.event_name == 'push'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
