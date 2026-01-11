@@ -8,7 +8,8 @@ import puppeteer from 'puppeteer';
 import { mkdir } from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
+import glob from 'glob';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, '..');
@@ -103,10 +104,15 @@ async function captureScreenshots() {
 
   // Compress PNGs with pngquant if available
   try {
-    execSync(`pngquant --force --quality=65-80 --ext .png ${OUTPUT_DIR}/*.png`, { stdio: 'inherit' });
-    console.log('Screenshots compressed with pngquant');
+    const pngFiles = glob.sync(join(OUTPUT_DIR, '*.png'));
+    if (pngFiles.length > 0) {
+      execFileSync('pngquant', ['--force', '--quality=65-80', '--ext', '.png', ...pngFiles], { stdio: 'inherit' });
+      console.log('Screenshots compressed with pngquant');
+    } else {
+      console.log('No PNG files found to compress');
+    }
   } catch {
-    console.log('pngquant not available, skipping compression');
+    console.log('pngquant not available or compression failed, skipping compression');
   }
 }
 

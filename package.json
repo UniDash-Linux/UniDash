@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "puppeteer": "^24.34.0"
-  }
+  },
+  "dependencies": {
+    "glob": "^13.0.0"
+}
 }
