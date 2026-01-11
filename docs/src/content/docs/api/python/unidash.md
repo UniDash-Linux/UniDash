@@ -1,9 +1,9 @@
 ---
-title: unidash_unidash
-description: API reference for unidash_unidash
+title: unidash_api
+description: API reference for unidash_api
 ---
 
-# unidash_unidash
+# unidash_api
 
 _Documentation will be auto-generated from docstrings._
 

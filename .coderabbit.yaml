@@ -9,8 +9,8 @@ reviews:
     enabled: true
     drafts: false
 
-  # Review profile - balanced between thoroughness and speed
-  profile: "balanced"
+  # Review profile - chill for balanced feedback
+  profile: "chill"
 
   # Request changes on critical issues
   request_changes_workflow: true

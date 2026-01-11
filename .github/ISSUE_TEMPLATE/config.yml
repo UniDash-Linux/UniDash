@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://OWNER.github.io/UniDash/
+    url: https://UniDash-Linux.github.io/UniDash/
     about: Check the documentation for answers to common questions.
   - name: Discussions
-    url: https://github.com/OWNER/UniDash/discussions
+    url: https://github.com/UniDash-Linux/UniDash/discussions
     about: Ask questions and share ideas in GitHub Discussions.
