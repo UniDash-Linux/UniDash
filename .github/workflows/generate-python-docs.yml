@@ -1,0 +1,81 @@
+# Generate Python API documentation using mkdocstrings
+# Outputs markdown files to docs/src/content/docs/api/python/
+name: Generate Python Docs
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "api/**/src/**/*.py"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "api/**/src/**/*.py"
+  workflow_dispatch:
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install -e "api/shared[dev]" -e "api/db[dev]" -e "api/sso[dev]" \
+            -e "api/unidash[dev]" -e "api/admin[dev]" -e "api/backup[dev]"
+
+      - name: Create output directory
+        run: mkdir -p docs/src/content/docs/api/python
+
+      - name: Generate Python documentation
+        run: |
+          cd docs
+          # Generate markdown for each package
+          python -c "
+          from pathlib import Path
+          import importlib
+          import inspect
+
+          packages = [
+              ('unidash_shared', 'shared'),
+              ('unidash_db', 'db'),
+              ('unidash_sso', 'sso'),
+              ('unidash_api', 'unidash'),
+              ('unidash_admin', 'admin'),
+              ('unidash_backup', 'backup'),
+          ]
+
+          output_dir = Path('src/content/docs/api/python')
+          output_dir.mkdir(parents=True, exist_ok=True)
+
+          for package_name, doc_name in packages:
+              try:
+                  module = importlib.import_module(package_name)
+                  doc = f'''---
+          title: {package_name}
+          description: API reference for {package_name}
+          ---
+
+          # {package_name}
+
+          ::: {package_name}
+          '''
+                  (output_dir / f'{doc_name}.md').write_text(doc)
+                  print(f'Generated {doc_name}.md')
+              except ImportError as e:
+                  print(f'Skipping {package_name}: {e}')
+          "
+
+      - name: Upload generated docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-docs
+          path: docs/src/content/docs/api/python/
+          retention-days: 7

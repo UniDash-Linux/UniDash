@@ -56,8 +56,6 @@ def test_pyproject_toml_valid(api_dir: str) -> None:
     import tomllib
 
     pyproject_path = PROJECT_ROOT / api_dir / "pyproject.toml"
-    if not pyproject_path.is_file():
-        pytest.skip(f"pyproject.toml not found in {api_dir}")
 
     with open(pyproject_path, "rb") as f:
         config = tomllib.load(f)

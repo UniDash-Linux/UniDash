@@ -1,0 +1,219 @@
+# Sprint Status - UniDash
+# Updated: 2026-01-10
+# Current Sprint: Infrastructure Setup
+
+generated: "2026-01-10"
+updated: "2026-01-10"
+project: "UniDash"
+current_sprint: "Sprint 1 - Infrastructure"
+
+# ═══════════════════════════════════════════════════════════════
+# DOCUMENTATION POLICY
+# ═══════════════════════════════════════════════════════════════
+# - Documentation is part of each story, not a separate epic
+# - Story 1.1 includes initial setup (GitHub Standards + Starlight + CI)
+# - Each subsequent story updates Starlight docs as needed
+# - CI blocks PRs without proper documentation (docstrings, JSDoc, Starlight)
+# - Language: English only (code, comments, docs, commits)
+
+documentation_policy:
+  principle: "Documentation is part of each story, not a separate epic"
+  language: "English only"
+  enforcement:
+    - "Ruff D rules - Python docstrings (blocking)"
+    - "eslint-plugin-jsdoc - TypeScript JSDoc (blocking)"
+    - "Custom action - Starlight update check (blocking)"
+    - "CodeRabbit AI - code review (advisory)"
+  auto_generation:
+    python: "mkdocstrings → docs/api/reference/"
+    typescript: "starlight-typedoc → docs/api/reference/"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 1: Infrastructure
+# ═══════════════════════════════════════════════════════════════
+# L'Admin Deploie un Cluster Pret a l'Emploi
+# FRs: FR1, FR2, FR3, FR4, FR5
+# NFRs: NFR5, NFR6, NFR9, NFR11
+
+epic_1_infrastructure:
+  title: "L'Admin Deploie un Cluster Pret a l'Emploi"
+  status: in_progress
+  branch: "feature/epic-1-infrastructure"
+  base_branch: "develop"
+  stories:
+    - id: "1-1"
+      title: "Initialisation du Projet UniDash"
+      status: in_progress
+      branch: "feature/1-1-project-init"
+      file: "_bmad-output/implementation-artifacts/1-1-initialisation-du-projet-unidash.md"
+      includes_initial_setup: true
+      phases_done:
+        - "Phase 1-9: Project structure, packages, linters, CI (55 tests)"
+      phases_todo:
+        - "Phase 10: GitHub Community Standards (README, CONTRIBUTING, etc.)"
+        - "Phase 11: Documentation Enforcement (Ruff D, ESLint JSDoc, CodeRabbit)"
+        - "Phase 12: Starlight Configuration (typedoc, mkdocstrings, sidebar)"
+        - "Phase 13: Final Validation"
+      description: |
+        Project structure + GitHub Community Standards + Starlight + CI:
+        - Repository structure (src layout PyPA) ✅
+        - Linters basic setup (Ruff, Black, ESLint, Prettier) ✅
+        - CI/CD basic workflows ✅
+
+        TODO:
+        - GitHub Community Standards 100% (README, CONTRIBUTING, LICENSE, SECURITY, templates)
+        - Documentation enforcement (Ruff D rules, ESLint JSDoc, CodeRabbit AI)
+        - Starlight advanced config (typedoc, mkdocstrings, Community links)
+        - Auto-generation API docs setup
+
+    - id: "1-2"
+      title: "Installation du Premier Noeud K3S"
+      status: pending
+      branch: "feature/1-2-k3s-first-node"
+      file: null
+      docs_required: "docs/deployment/k3s-setup.md"
+      description: |
+        K3S server installation via wizard
+        Doc: K3S setup guide in Starlight
+
+    - id: "1-3"
+      title: "Ajout de Noeuds au Cluster K3S HA"
+      status: pending
+      branch: "feature/1-3-k3s-ha-nodes"
+      file: null
+      docs_required: "docs/deployment/k3s-setup.md (update)"
+      description: |
+        Add nodes for HA cluster (3+ nodes)
+        Doc: Update K3S setup with HA section
+
+    - id: "1-4"
+      title: "Configuration VPN L2TP/IPsec"
+      status: pending
+      branch: "feature/1-4-vpn-setup"
+      file: null
+      docs_required: "docs/deployment/networking.md"
+      description: |
+        VPN server configuration (strongSwan)
+        Doc: VPN setup guide in Starlight
+
+    - id: "1-5"
+      title: "Gestion Automatique des Certificats SSL"
+      status: pending
+      branch: "feature/1-5-ssl-certificates"
+      file: null
+      docs_required: "docs/deployment/ssl-certificates.md"
+      description: |
+        cert-manager + Let's Encrypt
+        Doc: SSL/TLS guide in Starlight
+
+    - id: "1-6"
+      title: "Configuration Reverse Proxy HAProxy"
+      status: pending
+      branch: "feature/1-6-haproxy"
+      file: null
+      docs_required: "docs/deployment/networking.md (update)"
+      description: |
+        HAProxy for HTTP/TCP routing
+        Doc: Update networking with reverse proxy section
+
+    - id: "1-7"
+      title: "Configuration Nginx Stream pour Traffic UDP"
+      status: pending
+      branch: "feature/1-7-nginx-udp"
+      file: null
+      docs_required: "docs/deployment/networking.md (update)"
+      description: |
+        Nginx stream for UDP (VPN ports)
+        Doc: Update networking with UDP section
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 2: Authentification (pending - after Epic 1)
+# ═══════════════════════════════════════════════════════════════
+epic_2_auth:
+  title: "Authentification & Gestion des Identites"
+  status: pending
+  stories_count: 8
+  docs_sections:
+    - "docs/architecture/security.md"
+    - "docs/api/authentication.md"
+    - "docs/api/sso-api.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 3: Store (pending - after Epic 2)
+# ═══════════════════════════════════════════════════════════════
+epic_3_store:
+  title: "Store & Installation d'Applications"
+  status: pending
+  stories_count: 9
+  docs_sections:
+    - "docs/getting-started/installation.md"
+    - "docs/api/unidash-api.md"
+    - "docs/architecture/apis.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 4: Bureau Web (pending - after Epic 3)
+# ═══════════════════════════════════════════════════════════════
+epic_4_desktop:
+  title: "Bureau Web & Experience Utilisateur"
+  status: pending
+  stories_count: 13
+  docs_sections:
+    - "docs/getting-started/quick-start.md"
+    - "docs/architecture/frontend.md"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 5: Permissions (pending - after Epic 2)
+# ═══════════════════════════════════════════════════════════════
+epic_5_permissions:
+  title: "Permissions & Controle d'Acces"
+  status: pending
+  stories_count: 5
+  docs_sections:
+    - "docs/architecture/security.md (update)"
+
+# ═══════════════════════════════════════════════════════════════
+# EPIC 6: Administration (pending - after Epic 3)
+# ═══════════════════════════════════════════════════════════════
+epic_6_admin:
+  title: "Administration & Observabilite"
+  status: pending
+  stories_count: 7
+  docs_sections:
+    - "docs/deployment/monitoring.md"
+    - "docs/deployment/backup-restore.md"
+    - "docs/api/admin-api.md"
+    - "docs/api/backup-api.md"
+
+# ═══════════════════════════════════════════════════════════════
+# GITFLOW WORKFLOW
+# ═══════════════════════════════════════════════════════════════
+gitflow:
+  main: "main"
+  develop: "develop"
+  feature_prefix: "feature/"
+  bugfix_prefix: "bugfix/"
+  release_prefix: "release/"
+  hotfix_prefix: "hotfix/"
+
+# ═══════════════════════════════════════════════════════════════
+# SUMMARY
+# ═══════════════════════════════════════════════════════════════
+summary:
+  total_epics: 6
+  total_stories: 49
+  stories_done: 0
+  stories_in_progress: 1
+  stories_pending: 48
+  current_epic: "Epic 1 - Infrastructure"
+  current_story: "1-1"
+  current_branch: "feature/1-1-project-init"
+  next_story: "1-2"
+  next_branch: "feature/1-2-k3s-first-node"
+
+  progress:
+    epic_1: "1/7 (14%)"
+    epic_2: "0/8 (0%)"
+    epic_3: "0/9 (0%)"
+    epic_4: "0/13 (0%)"
+    epic_5: "0/5 (0%)"
+    epic_6: "0/7 (0%)"

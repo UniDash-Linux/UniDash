@@ -1,0 +1,37 @@
+# MkDocs configuration for Python API documentation generation
+# This generates markdown files that are then copied to Starlight docs
+site_name: UniDash Python API
+site_description: Python API documentation for UniDash
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+            members_order: source
+
+nav:
+  - API Reference:
+      - Shared: api/python/shared.md
+      - Database: api/python/db.md
+      - SSO: api/python/sso.md
+      - UniDash: api/python/unidash.md
+      - Admin: api/python/admin.md
+      - Backup: api/python/backup.md
+
+# Python packages to document
+watch:
+  - ../api/shared/src
+  - ../api/db/src
+  - ../api/sso/src
+  - ../api/unidash/src
+  - ../api/admin/src
+  - ../api/backup/src
