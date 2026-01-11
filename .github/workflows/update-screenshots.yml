@@ -3,8 +3,6 @@ name: Update Screenshots
 on:
   push:
     branches: [develop]
-  pull_request:
-    branches: [develop]
   workflow_dispatch:
 
 jobs:
@@ -22,10 +20,9 @@ jobs:
               - '_bmad-output/planning-artifacts/ux-design-directions.html'
               - 'scripts/generate-screenshots.mjs'
 
-  # Only runs on push to develop - generates screenshots and creates PR
   generate:
     needs: changes
-    if: needs.changes.outputs.mockups == 'true' && github.event_name == 'push'
+    if: needs.changes.outputs.mockups == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -85,15 +82,9 @@ jobs:
             automated
             documentation
 
-  # Skipped message for PRs and push without mockup changes
   generate-skipped:
     needs: changes
-    if: needs.changes.outputs.mockups != 'true' || github.event_name == 'pull_request'
+    if: needs.changes.outputs.mockups != 'true'
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "Screenshot generation only runs on push to develop"
-          else
-            echo "No mockup changes detected, skipping screenshot generation"
-          fi
+      - run: echo "No mockup changes detected, skipping screenshot generation"
