@@ -85,8 +85,6 @@ jobs:
           labels: |
             automated
             documentation
-          milestone: 1
-          draft: false
 
   generate-skipped:
     needs: changes
