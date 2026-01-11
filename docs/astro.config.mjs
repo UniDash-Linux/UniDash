@@ -100,6 +100,14 @@ export default defineConfig({
                             label: "Code of Conduct",
                             link: "https://github.com/UniDash-Linux/UniDash/blob/main/CODE_OF_CONDUCT.md",
                         },
+                        {
+                            label: "License",
+                            link: "https://github.com/UniDash-Linux/UniDash/blob/main/LICENSE",
+                        },
+                        {
+                            label: "Security",
+                            link: "https://github.com/UniDash-Linux/UniDash/blob/main/SECURITY.md",
+                        },
                     ],
                 },
             ],
