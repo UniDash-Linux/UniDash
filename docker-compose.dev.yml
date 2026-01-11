@@ -1,0 +1,235 @@
+# UniDash Development Docker Compose
+# Based on architecture.md - Separated services with defined ports
+#
+# Services not yet implemented are commented out
+# Uncomment as Dockerfiles are created in each api/<service>/ folder
+#
+# Ports mapping (from architecture):
+#   - PostgreSQL: 5432 (internal)
+#   - Redis: 6379 (internal)
+#   - api/db: 8000 (ClusterIP - internal only)
+#   - api/sso: 8001 (Internet/VPN User)
+#   - api/unidash: 8002 (Internet/VPN User)
+#   - api/admin: 8003 (VPN Admin only)
+#   - api/backup: 8004 (ClusterIP - internal only)
+#   - web: 3000 (Internet/VPN User)
+#   - docs: 4321 (development only)
+
+services:
+  # ===========================================
+  # INFRASTRUCTURE SERVICES
+  # ===========================================
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: unidash-postgres
+    environment:
+      POSTGRES_USER: unidash
+      POSTGRES_PASSWORD: unidash_dev
+      POSTGRES_DB: unidash
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unidash"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: unidash-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===========================================
+  # PYTHON APIs (src layout - unidash_* packages)
+  # ===========================================
+
+  # API-DB: Database access layer (ClusterIP internal)
+  # Dockerfile: api/db/Dockerfile
+  # api-db:
+  #   build:
+  #     context: ./api/db
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-api-db
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     DATABASE_URL: postgresql://unidash:unidash_dev@postgres:5432/unidash
+  #     REDIS_URL: redis://redis:6379/0
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./api/db/src:/app/src:ro
+  #     - ./api/shared/src:/app/shared:ro
+  #   command: uvicorn unidash_db.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # API-SSO: Authentication & OIDC provider (Internet/VPN User)
+  # Dockerfile: api/sso/Dockerfile
+  # api-sso:
+  #   build:
+  #     context: ./api/sso
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-api-sso
+  #   ports:
+  #     - "8001:8001"
+  #   environment:
+  #     DATABASE_URL: postgresql://unidash:unidash_dev@postgres:5432/unidash
+  #     REDIS_URL: redis://redis:6379/1
+  #     API_DB_URL: http://api-db:8000
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     # api-db:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     - ./api/sso/src:/app/src:ro
+  #     - ./api/shared/src:/app/shared:ro
+  #   command: uvicorn unidash_sso.api.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # API-UniDash: Main business logic (Internet/VPN User)
+  # Dockerfile: api/unidash/Dockerfile
+  # api-unidash:
+  #   build:
+  #     context: ./api/unidash
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-api-unidash
+  #   ports:
+  #     - "8002:8002"
+  #   environment:
+  #     DATABASE_URL: postgresql://unidash:unidash_dev@postgres:5432/unidash
+  #     REDIS_URL: redis://redis:6379/2
+  #     API_DB_URL: http://api-db:8000
+  #     API_SSO_URL: http://api-sso:8001
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     # api-db:
+  #     #   condition: service_healthy
+  #     # api-sso:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     - ./api/unidash/src:/app/src:ro
+  #     - ./api/shared/src:/app/shared:ro
+  #   command: uvicorn unidash_api.api.main:app --host 0.0.0.0 --port 8002 --reload
+
+  # API-Admin: Administration (VPN Admin only)
+  # Dockerfile: api/admin/Dockerfile
+  # api-admin:
+  #   build:
+  #     context: ./api/admin
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-api-admin
+  #   ports:
+  #     - "8003:8003"
+  #   environment:
+  #     DATABASE_URL: postgresql://unidash:unidash_dev@postgres:5432/unidash
+  #     REDIS_URL: redis://redis:6379/3
+  #     API_DB_URL: http://api-db:8000
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     # api-db:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     - ./api/admin/src:/app/src:ro
+  #     - ./api/shared/src:/app/shared:ro
+  #   command: uvicorn unidash_admin.api.main:app --host 0.0.0.0 --port 8003 --reload
+
+  # API-Backup: Backup service (ClusterIP internal)
+  # Dockerfile: api/backup/Dockerfile
+  # api-backup:
+  #   build:
+  #     context: ./api/backup
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-api-backup
+  #   ports:
+  #     - "8004:8004"
+  #   environment:
+  #     DATABASE_URL: postgresql://unidash:unidash_dev@postgres:5432/unidash
+  #     REDIS_URL: redis://redis:6379/4
+  #     API_DB_URL: http://api-db:8000
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     # api-db:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     - ./api/backup/src:/app/src:ro
+  #     - ./api/shared/src:/app/shared:ro
+  #   command: uvicorn unidash_backup.api.main:app --host 0.0.0.0 --port 8004 --reload
+
+  # ===========================================
+  # FRONTEND (Astro)
+  # ===========================================
+
+  # Web: Astro frontend (Internet/VPN User)
+  # Dockerfile: web/Dockerfile
+  # web:
+  #   build:
+  #     context: ./web
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-web
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     PUBLIC_API_SSO_URL: http://localhost:8001
+  #     PUBLIC_API_UNIDASH_URL: http://localhost:8002
+  #   depends_on:
+  #     # api-sso:
+  #     #   condition: service_healthy
+  #     # api-unidash:
+  #     #   condition: service_healthy
+  #   volumes:
+  #     - ./web/src:/app/src:ro
+  #     - ./web/public:/app/public:ro
+  #   command: npm run dev -- --host 0.0.0.0
+
+  # ===========================================
+  # DOCUMENTATION (Starlight - dev only)
+  # ===========================================
+
+  # Docs: Starlight documentation (development preview)
+  # Note: Production docs are deployed to GitHub Pages
+  # Dockerfile: docs/Dockerfile
+  # docs:
+  #   build:
+  #     context: ./docs
+  #     dockerfile: Dockerfile
+  #   container_name: unidash-docs
+  #   ports:
+  #     - "4321:4321"
+  #   volumes:
+  #     - ./docs/src:/app/src:ro
+  #   command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  postgres_data:
+  redis_data:
+
+# Network configuration
+# All services communicate on the default bridge network
+# Production uses K3S networking with ClusterIP/LoadBalancer
+networks:
+  default:
+    name: unidash-dev

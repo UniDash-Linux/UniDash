@@ -1,0 +1,63 @@
+# CodeRabbit AI Configuration
+# https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "en-US"
+
+reviews:
+  # Enable automatic reviews on PRs
+  auto_review:
+    enabled: true
+    drafts: false
+
+  # Review profile - chill for balanced feedback
+  profile: "chill"
+
+  # Request changes on critical issues
+  request_changes_workflow: true
+
+  # High-level summary at the end of review
+  high_level_summary: true
+
+  # Review specific areas
+  path_instructions:
+    - path: "api/**"
+      instructions: |
+        Review Python code for:
+        - Google style docstrings on public functions/classes
+        - Type hints usage
+        - FastAPI best practices
+        - Security concerns (SQL injection, auth issues)
+
+    - path: "web/**"
+      instructions: |
+        Review TypeScript/React code for:
+        - JSDoc comments on exported functions
+        - React best practices and hooks usage
+        - Accessibility (a11y) concerns
+        - Performance considerations
+
+    - path: "docs/**"
+      instructions: |
+        Review documentation for:
+        - Clarity and completeness
+        - Correct links and references
+        - English language quality
+
+    - path: "infra/**"
+      instructions: |
+        Review infrastructure code for:
+        - Security best practices
+        - K8S/Ansible best practices
+        - Clear documentation
+
+chat:
+  # Enable chat interactions in PR comments
+  auto_reply: true
+
+# Ignore certain files from review
+ignore:
+  - "**/*.lock"
+  - "**/node_modules/**"
+  - "**/.venv/**"
+  - "**/dist/**"
+  - "**/.astro/**"
