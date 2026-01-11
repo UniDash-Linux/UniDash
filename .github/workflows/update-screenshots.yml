@@ -58,7 +58,7 @@ jobs:
         run: node scripts/generate-screenshots.mjs
 
       - name: Check for changes
-        id: changes
+        id: check-changes
         run: |
           find docs/src/assets/screenshots -name '*.png' -exec sha256sum {} \; | sort > /tmp/after.txt
           if diff -q /tmp/before.txt /tmp/after.txt > /dev/null; then
@@ -68,7 +68,7 @@ jobs:
           fi
 
       - name: Create Pull Request
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.check-changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
