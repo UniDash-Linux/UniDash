@@ -1,40 +1,64 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: UniDash
+description: A self-hosted web desktop platform for managing multiple web applications through a single authentication system.
+template: splash
 hero:
-    tagline: Congrats on setting up a new Starlight project!
+    tagline: Your unified web desktop. Manage all your self-hosted apps in one place with SSO, tiling windows, and one-click installation.
     image:
-        file: ../../assets/houston.webp
+        file: ../../assets/screenshots/desktop-icons-light.png
     actions:
-        - text: Example Guide
-          link: /guides/example/
+        - text: Get Started
+          link: /getting-started/introduction/
           icon: right-arrow
-        - text: Read the Starlight docs
-          link: https://starlight.astro.build
+        - text: View on GitHub
+          link: https://github.com/UniDash-Linux/UniDash
           icon: external
           variant: minimal
 ---
 
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
-## Next steps
+## Key Features
 
 <CardGrid stagger>
-    <Card title="Update content" icon="pencil">
-        Edit `src/content/docs/index.mdx` to see this page change.
+    <Card title="Web Desktop" icon="laptop">
+        A familiar desktop experience in your browser with windows, dock, and
+        tiling layouts. Works on desktop, tablet, and mobile.
     </Card>
-    <Card title="Change page layout" icon="document">
-        Delete `template: splash` in `src/content/docs/index.mdx` to display a
-        sidebar on this page.
+    <Card title="Single Sign-On" icon="approve-check-circle">
+        One login for all your apps. Supports OIDC, LDAP, and proxy
+        authentication for seamless access.
     </Card>
-    <Card title="Add new content" icon="add-document">
-        Add Markdown or MDX files to `src/content/docs` to create new pages.
+    <Card title="App Store" icon="puzzle">
+        Install self-hosted applications with one click. No YAML, no CLI, just
+        point and click.
     </Card>
-    <Card title="Configure your site" icon="setting">
-        Edit your `sidebar` and other config in `astro.config.mjs`.
-    </Card>
-    <Card title="Read the docs" icon="open-book">
-        Learn more in [the Starlight Docs](https://starlight.astro.build/).
+    <Card title="K3S Cluster" icon="rocket">
+        Built on Kubernetes for high availability. Scale from a single node to a
+        full cluster.
     </Card>
 </CardGrid>
+
+## Quick Install
+
+```bash
+curl -sL unidash.io/install | bash
+```
+
+Then open the displayed URL in your browser to complete the setup wizard.
+
+## UI Mockups
+
+> These are design mockups representing the planned interface, not the final implementation.
+
+### Desktop Interface
+
+![UniDash Desktop Mockup](../../assets/screenshots/desktop-icons-light.png)
+
+### App Store
+
+![UniDash Store Mockup](../../assets/screenshots/store-light.png)
+
+### Mobile View
+
+![UniDash Mobile Mockup](../../assets/screenshots/mobile-light.png)

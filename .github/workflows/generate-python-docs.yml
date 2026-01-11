@@ -5,16 +5,28 @@ name: Generate Python Docs
 on:
   push:
     branches: [main, develop]
-    paths:
-      - "api/**/src/**/*.py"
   pull_request:
     branches: [main, develop]
-    paths:
-      - "api/**/src/**/*.py"
   workflow_dispatch:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            python:
+              - 'api/**/src/**/*.py'
+              - '.github/workflows/generate-python-docs.yml'
+
   generate-docs:
+    needs: changes
+    if: needs.changes.outputs.python == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -22,7 +34,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -79,3 +91,10 @@ jobs:
           name: python-docs
           path: docs/src/content/docs/api/python/
           retention-days: 7
+
+  generate-docs-skipped:
+    needs: changes
+    if: needs.changes.outputs.python != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No Python source changes detected, skipping docs generation"

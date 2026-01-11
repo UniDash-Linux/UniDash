@@ -3,17 +3,27 @@ name: Web CI
 on:
   push:
     branches: [main, develop]
-    paths:
-      - "web/**"
-      - ".github/workflows/ci-web.yml"
   pull_request:
     branches: [main, develop]
-    paths:
-      - "web/**"
-      - ".github/workflows/ci-web.yml"
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'web/**'
+              - '.github/workflows/ci-web.yml'
+
   test:
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -42,7 +52,16 @@ jobs:
         run: npm run build
         working-directory: web
 
+  test-skipped:
+    needs: changes
+    if: needs.changes.outputs.web != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No Web changes detected, skipping tests"
+
   lint:
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -65,3 +84,10 @@ jobs:
       - name: Check Prettier
         run: npx prettier --check .
         working-directory: web
+
+  lint-skipped:
+    needs: changes
+    if: needs.changes.outputs.web != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No Web changes detected, skipping lint"
