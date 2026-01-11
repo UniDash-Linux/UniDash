@@ -39,7 +39,7 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of unacceptable behavior may be reported to the community leaders
-responsible for enforcement at <conduct@unidash.example.com>.
+responsible for enforcement at <pikatsuto@gmail.com>.
 
 All complaints will be reviewed and investigated promptly and fairly.
 
