@@ -3,20 +3,35 @@ name: Update Screenshots
 on:
   push:
     branches: [develop]
-    paths:
-      - "_bmad-output/planning-artifacts/ux-design-directions.html"
-      - "scripts/generate-screenshots.mjs"
   workflow_dispatch:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      mockups: ${{ steps.filter.outputs.mockups }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            mockups:
+              - '_bmad-output/planning-artifacts/ux-design-directions.html'
+              - 'scripts/generate-screenshots.mjs'
+
   generate:
+    needs: changes
+    if: needs.changes.outputs.mockups == 'true'
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          ref: develop
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: "npm"
@@ -52,3 +67,10 @@ jobs:
           labels: |
             automated
             documentation
+
+  generate-skipped:
+    needs: changes
+    if: needs.changes.outputs.mockups != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No mockup changes detected, skipping screenshot generation"
