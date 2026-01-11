@@ -9,8 +9,9 @@ reviews:
     enabled: true
     drafts: false
 
-  # Review profile - chill for balanced feedback
-  profile: "chill"
+  # Review profile - assertive for security-focused feedback
+  # UniDash handles authentication (SSO, OIDC, passwords) so we need strict reviews
+  profile: "assertive"
 
   # Request changes on critical issues
   request_changes_workflow: true

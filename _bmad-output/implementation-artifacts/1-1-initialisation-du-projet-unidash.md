@@ -1,6 +1,6 @@
 # Story 1.1: Initialisation du Projet UniDash
 
-Status: done
+Status: review
 
 ## Story
 
@@ -525,7 +525,6 @@ Claude Opus 4.5 (claude-opus-4-5-20251101)
 - CODE_OF_CONDUCT.md
 - SECURITY.md
 - docker-compose.dev.yml
-- Dockerfile.dev
 
 **API packages (src layout PyPA):**
 - api/shared/pyproject.toml, src/unidash_shared/__init__.py

@@ -20,7 +20,11 @@ select = [
 ]
 ignore = [
     "E501",   # line too long (handled by black)
-    "D100",   # Missing docstring in public module (too strict for now)
+    # D100/D104: Module and package docstrings are optional for now.
+    # Rationale: __init__.py files are often empty or contain only imports,
+    # and adding docstrings would be boilerplate. Function/class docstrings
+    # are still enforced (D101-D107). This is a deliberate project decision.
+    "D100",   # Missing docstring in public module
     "D104",   # Missing docstring in public package
 ]
 
